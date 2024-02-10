@@ -2,6 +2,10 @@
 
 To get this project up and running after cloning the repo, you have to:
 1. Open a terminal
-2. Change the working directory to the project's directory using `cd <project directory>` command.
-3. Install the dependencies by typing `npm install` for npm or by typing `yarn install` for yarn.
-4. To run the app you have to type `npm run dev` for npm or `yarn run dev` for yarn.
+2. Change the working directory to the project's directory using the `cd <project directory>` command.
+3. Install the dependencies by typing
+   - `npm install` if you are using npm.
+   - `yarn install` if you are using yarn.
+5. To run the app, you must type:
+   - `npm run dev` if you are using npm.
+   - `yarn run dev` if you are using yarn.
