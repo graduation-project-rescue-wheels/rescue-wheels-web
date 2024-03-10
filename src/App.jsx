@@ -5,6 +5,7 @@ import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import { ConfigStore } from './store/store'
 import { Provider } from 'react-redux'
+import HomePage from './pages/HomePage/HomePage'
 
 function App() {
   
@@ -12,6 +13,8 @@ function App() {
     { path: '/', element: <Login /> },
     { path: '/login', element: <Login /> },
     { path: '/Register', element: <Register /> },
+    { path: '/HomePage', element: <HomePage /> },
+    
   ])
   return (
     <>

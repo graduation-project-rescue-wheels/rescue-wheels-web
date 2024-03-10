@@ -5,6 +5,7 @@ import * as YUP from "yup";
 import img1 from '../../assets/Saly-3 (1).png';
 import { useDispatch } from "react-redux";
 import { HandelRegister } from "../../store/AuthSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Register = () => {
     email: YUP.string()
       .required("Email is required")
       .email("Enter a valid email"),
-    password: YUP.string().required("Password is required").min(6, "Password must be at least 6 characters"),
+    password: YUP.string().required("Password is required").min(6, "Password must be at least 6 characters").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,"   & At least one lowercase letter At least one uppercase letter At least one digit At least one special character (in the set !@#$%^&*)  Minimum length of 8 characters"),
     confirmPassword: YUP.string().required("Confirm password is required").oneOf([YUP.ref("password"), null], "Passwords must match"),
     mobileNumber: YUP.string().required("Mobile number is required").matches(/^[0-9]{11}$/, "Enter a valid mobile number"),
   });
@@ -30,6 +31,7 @@ const Register = () => {
       password: "",
       confirmPassword: "",
       mobileNumber: "",
+      role:"User"
     },
     validationSchema,
     onSubmit: handleFormSubmitRegister,
@@ -39,30 +41,56 @@ const Register = () => {
   async function handleFormSubmitRegister() {
     setLoading(true);
     setErrMessage("");
-    try {
+ 
+      console.log(RegisterForm.values);
         const res = await dispatch(HandelRegister(RegisterForm.values));
-        if (!res) {
-            setErrMessage("An error occurred");
-            return;
-        } else if (res.status === 400) {
-            setErrMessage(res.data.error);
-            return;
+        console.log(res);
+        // & Toastify  
+        if(res.payload.status === 201){
+          toast.success(res.payload.data.message, {
+            style: {
+              border: '1px solid #e48700',
+              padding: '16px',
+              color: '#000000',
+            },
+            iconTheme: {
+              primary: '#e48700',
+              secondary: '#FFFAEE',
+            },
+          });
+        }else{
+          toast.error(res.payload.message, {
+            style: {
+              border: '1px solid #e48700',
+              padding: '16px',
+              color: '#000000',
+            },
+            iconTheme: {
+              primary: '#e48700',
+              secondary: '#FFFAEE',
+            },
+          });
         }
-    } catch (error) {
-        console.error('Error occurred during registration:', error);
-        setErrMessage("An error occurred");
-    }
+
+       
+
 }
+
+
 
 
   return (
     <>
+    <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <div className="container-fluid">
         <div className="row gy-5">
           <div className="col-md-6 p-0">
             <div className="" style={{ height: '100vh', backgroundColor: '#e48700', position: 'relative' }}>
               <div>
-                <img src={img1} alt="img1" style={{ width: '50%', height: '50%', bottom: '50%', position: 'absolute', zIndex: '0' }} />
+                <img src={img1} alt="img1" style={{ width: '70%', height: '70%', bottom: '-2%',left:'20%', position: 'absolute', zIndex: '0' }} />
               </div>
               <div className="d-flex flex-column justify-content-center align-items-center h-100 text-light" style={{ position: 'relative', zIndex: '8796' }}>
                 <h2>Welcome to Rescue Wheels</h2>
@@ -178,7 +206,7 @@ const Register = () => {
                   <button
                     type="submit"
                     className="btn border-0  w-100"
-                    // disabled={!(RegisterForm.isValid && RegisterForm.dirty) || loading}
+                    disabled={!(RegisterForm.isValid && RegisterForm.dirty) || loading}
                     style={{backgroundColor:'#e48700',borderBlockColor:'#e48700',boxShadow:'1px 1px 1px #e48700'}}
                   >
                     {loading ? 'Loading...' : 'Register'}
