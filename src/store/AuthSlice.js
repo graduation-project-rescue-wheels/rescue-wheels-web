@@ -7,8 +7,7 @@ export const HandelLogin = createAsyncThunk(
     'auth/handleLogin',
     async (formData) => {
       try {
-        const response = await axios.post('http://localhost:3000/user/signIn', formData, {
-        });
+        const response = await axios.post('http://localhost:3300/user/signIn', formData, null);
   
         console.log('Login successful:', response.data);
   
@@ -41,8 +40,8 @@ export const HandelRegister = createAsyncThunk(
       console.log(response);
       return response;
     } catch (error) {
-      console.error('Error occurred during registration:', error);
-      return error.response.data.error || 'An error occurred';
+      console.error('Error occurred during registration:', error.response.data);
+      return  error.response.data ;
     }
   }
 );

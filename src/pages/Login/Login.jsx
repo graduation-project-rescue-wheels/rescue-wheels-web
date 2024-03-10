@@ -5,6 +5,7 @@ import * as YUP from "yup";
 import img1 from '../../assets/Saly-3 (1).png'
 import { useDispatch } from "react-redux";
 import { HandelLogin } from "../../store/AuthSlice";
+import toast, { Toaster } from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -18,8 +19,8 @@ const Login = () => {
         /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
         "Enter Vaild Email"
       ),
-    password: YUP.string().required("password is Required"),
-  });
+      password: YUP.string().required("Password is required").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/," At least one lowercase letter At least one uppercase letter At least one digit At least one special character (in the set !@#$%^&*)  Minimum length of 8 characters"),
+    });
   const handleFormSubmitLogin = async () => {
     // e.preventDefault();
     setLoading(true);
@@ -27,6 +28,34 @@ const Login = () => {
     const res = await dispatch(HandelLogin(LoginForm.values))
     setLoading(false);
     console.log(res);
+    if(res.payload.status === 200){
+      toast.success(res.payload.message, {
+      style: {
+        border: '1px solid #e48700',
+        padding: '16px',
+        color: '#000000',
+      },
+      iconTheme: {
+        primary: '#e48700',
+        secondary: '#FFFAEE',
+      },
+    });
+    localStorage.setItem("Token", res.payload.Token);
+    navigate('/HomePage')
+    }else{
+      toast.success(res.payload.data.message, {
+        style: {
+          border: '1px solid #e48700',
+          padding: '16px',
+          color: '#000000',
+        },
+        iconTheme: {
+          primary: '#e48700',
+          secondary: '#FFFAEE',
+        },
+      });
+    }
+ 
     setErrMessage("")
   }
   let LoginForm = useFormik({
@@ -42,12 +71,16 @@ const Login = () => {
 
   return (
     <>
+       <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <div className="container-fluid">
         <div className="row gy-5">
           <div className="col-md-6 p-0">
             <div className="" style={{ height: '100vh' ,backgroundColor:'#e48700',position:'relative'}}>
             <div>
-              <img src={img1} alt="img1" style={{ width: '50%', height: '50%',bottom:'50%',position:'absolute',zIndex:'0' }} />
+            <img src={img1} alt="img1" style={{ width: '70%', height: '70%', bottom: '-2%',left:'20%', position: 'absolute', zIndex: '0' }} />
             </div>
               <div className="d-flex flex-column justify-content-center align-items-center h-100 text-light" style={{position:'relative',zIndex:'8796'}}>
                 <h2>Welcome to Rescue Wheels</h2>
@@ -111,11 +144,11 @@ const Login = () => {
                 <div className="d-flex justify-content-between">
                 <button
                     // type="submit"
-                    className="btn border-0  w-100"
+                    className="btn border-0  w-100 text-white"
                     disabled={!(LoginForm.isValid && LoginForm.dirty) || loading}
                     style={{backgroundColor:'#e48700',borderBlockColor:'#e48700',boxShadow:'1px 1px 1px #e48700'}}
                   >
-                    {loading ? 'Loading...' : 'Register'}
+                    {loading ? 'Loading...' : 'Login'}
                   </button>
                
                 </div>
