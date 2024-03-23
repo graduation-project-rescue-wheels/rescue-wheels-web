@@ -1,0 +1,13 @@
+.heroSection {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media (max-width: 991px) {
+  .heroSection {
+    flex-direction: column !important;
+  }
+  .img {
+    width: 100% !important;
+  }
+}
