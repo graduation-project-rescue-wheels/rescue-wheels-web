@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { showErrorToast, showSuccessToast } from './../components/toast';
 
 // &----------------------------------------- Login --------------------------------------------
 
@@ -13,7 +14,7 @@ export const HandelLogin = createAsyncThunk(
         null
       );
 
-      console.log('Login successful:', response.data);
+      console.log("Login successful:", response.data);
 
       return response.data;
     } catch (error) {
@@ -40,8 +41,8 @@ export const HandelRegister = createAsyncThunk(
         body
       );
 
-      console.log(response);
-      return response;
+      console.log(response.data);
+      return response.data;
     } catch (error) {
       console.error("Error occurred during registration:", error.response.data);
       return error.response.data;
@@ -49,6 +50,215 @@ export const HandelRegister = createAsyncThunk(
   }
 );
 
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------Update Info--------------------------------------------
+
+export const UpdateUser = createAsyncThunk(
+  "user/updateUserAsync",
+  async (formData) => {
+    let body = formData;
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.put(
+        "http://localhost:3000/user/UpdateUserData",
+        body,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.message);
+      }
+      return error.response.data;
+    }
+  }
+);
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------Update Password--------------------------------------------
+
+export const UpdatePassword = createAsyncThunk(
+  "user/updatePasswordAsync",
+  async (formData) => {
+    let body = formData;
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.put(
+        "http://localhost:3000/user/UpdatePassword",
+        body,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
+
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------get user data--------------------------------------------
+
+export const getUserData = createAsyncThunk(
+  "user/getUserDataAsync",
+  async () => {
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/user/getUserData",
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
+
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------add vehicle--------------------------------------------
+
+export const addVehicle = createAsyncThunk(
+  "user/addVehicleAsync",
+  async (formData) => {
+    let body = formData;
+    console.log(body);
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/user/addVehicle",
+        body,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        showSuccessToast(response.data.message);
+      }
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
+
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------get vehicle--------------------------------------------
+
+export const getVehicleById = createAsyncThunk(
+  "vehicle/getVehicleByIdAsync",
+  async (id) => {
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/vehicle/getVehicleById/${id}`,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        showSuccessToast(response.data.message);
+      }
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
+
+// &-------------------------------------------------------------------------------------
+
+// &-----------------------------------------get vehicle--------------------------------------------
+
+export const deleteVehicle = createAsyncThunk(
+  "vehicle/deleteVehicleAsync",
+  async (id) => {
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/vehicle/deleteVehicle/${id}`,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+      }
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
 
 let AuthSlice = createSlice({
   name: "Auth",
@@ -76,6 +286,40 @@ let AuthSlice = createSlice({
       state.UserData = action.payload.userData;
       console.log(action.payload.userData);
     });
-  }
+
+    // ^ UpdateUser
+    builder.addCase(UpdateUser.fulfilled, (state, action) => {
+      if (action.payload.isValid) {
+        state.UserData = action.payload.data;
+        console.log(action.payload);
+      }
+    });
+
+    // ^ UpdatePassword
+    builder.addCase(UpdatePassword.fulfilled, (state, action) => {
+      if (action.payload.isValid) {
+        state.UserData = action.payload.data;
+        console.log(action.payload.data);
+      }
+    });
+
+    // ^ GetUserData
+    builder.addCase(getUserData.fulfilled, (state, action) => {
+      state.UserData = action.payload.data;
+      console.log(action.payload.data);
+    });
+
+    // ^ AddVehicle
+    builder.addCase(addVehicle.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      console.log(action.payload.user);
+    });
+
+    // ^ DeleteVehicle
+    builder.addCase(deleteVehicle.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      console.log(action.payload.user);
+    });
+  },
 });
 export default AuthSlice.reducer;
