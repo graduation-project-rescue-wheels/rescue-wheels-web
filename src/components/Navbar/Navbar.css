@@ -1,0 +1,3 @@
+.btn:first-child:active, .btn.show {
+    border-color: transparent !important;
+}
