@@ -1,0 +1,14 @@
+.componenthover{
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
+    border: #ffffff 2px solid;
+
+    transition: 0.3s;
+}
+.componenthover:hover{
+    box-shadow: 0 8px 16px 0 #e48700;
+    border: #e48700 2px solid;
+}

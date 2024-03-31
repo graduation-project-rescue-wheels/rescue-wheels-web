@@ -1,47 +1,42 @@
-import { useMemo } from "react";
-import img from "../../assets/5098287-Photoroom.png-Photoroom.png"
-import { useSelector } from "react-redux";
-import Input from "../../components/Input";
-import "./HomePage.css"
+// import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { useEffect, useState } from "react"
+import { GetAllRepairCenters } from "../../store/RepairCenterSlice"
+import RepairCenterComponent from "../../components/RepairCenterComponent/RepairCenterComponent"
 
 const HomePage = () => {
-  const user = useSelector(state => state.AuthData.UserData);
-  const username = `${user.firstName} ${user.lastName}`;
-  const isFirstHalfOfDay = useMemo(() => new Date().getHours() < 12, [])
-
+  // const navigate = useNavigate()
+  const dispatch = useDispatch()
+  // const {AddRepaircenterData} = useSelector((x)=>x.RepairCenterData)
+  const [repairCenterData,setRepairCenterData] = useState([])
+  const fetchRepairCeneterData = async () => {
+    console.log("kjdfhg");
+    const res = await dispatch(GetAllRepairCenters())
+    console.log(res.payload.data);
+    if(res.payload?.success){
+      setRepairCenterData(res.payload.data);
+      console.log("Repair center data fetched successfully:", repairCenterData);
+    }
+    
+  }
+  useEffect(()=>{
+    fetchRepairCeneterData()
+  },[])
   return (
-    <>
-      
-
-      <div className="heroSection ps-5 pe-5" style={{ backgroundColor: "white", marginTop: "100px" }}>
-        <div className="d-flex justify-content-center align-items-center flex-column w-50">
-          {
-            user.length !== 0 && (isFirstHalfOfDay ?
-              <h1>
-                Good morning, {username}
-              </h1>
-              :
-              <h1>
-                Good afternoon, {username}
-              </h1>
-            )}
-          <div className="form-control border-0">
-            <Input
-              text={"Enter Location"}
-              type='location'
-              name='location'
-              id='location'
-            />
-            <button className="btn" style={{ backgroundColor: "#e48700", color: "white" }}>
-              See the nearest repair center
-            </button>
+    <div>
+      <div className="container mt-5 ">
+      <h2 className="fw-bold">Repair Centers</h2>
+        <div className="row gy-3">
+          {repairCenterData.map((el)=>{
+            return <div key={el._id}  className="col-md-3">
+          <RepairCenterComponent id={el._id} name= {el.name} description={el.description} image={el.Image.secure_url}/>
           </div>
-        </div>
-        <div className="img d-flex justify-content-center align-items-center flex-column" style={{ width: "50%" }}>
-          <img src={img} alt="" style={{ width: "100%" }} />
+          })}
+        
+         
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
