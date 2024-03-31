@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import * as YUP from "yup";
 import img from "../../assets/143086968_2856368904622192_1959732218791162458_n.png"
 import { useDispatch, useSelector } from "react-redux";
@@ -8,11 +8,11 @@ import { Toaster } from "react-hot-toast";
 import "./Settings.css"
 import Navbar from "../../components/Navbar/Navbar";
 import Input from "../../components/Input";
+import Loader from "../../components/Loader/Loader";
 
 
 const Settings = () => {
     const dispatch = useDispatch();
-    let [errMessage, setErrMessage] = useState("");
 
     const inputRef = useRef(null)
 
@@ -55,13 +55,19 @@ const Settings = () => {
     });
 
     async function handleFormSubmitPasswordUpdate() {
-        setErrMessage("");
         await dispatch(UpdatePassword(PasswordForm.values));
     }
 
     async function handleInfoFormSubmitUpdate() {
-        setErrMessage("");
-        await dispatch(UpdateUser(InfoUpdateForm.values));
+        let formData ={}
+        if(InfoUpdateForm.values.email === user.email && InfoUpdateForm.values.mobileNumber === user.mobileNumber){
+            formData.firstName = InfoUpdateForm.values.firstName;
+            formData.lastName = InfoUpdateForm.values.lastName;
+            
+        }else{
+            formData = InfoUpdateForm.values;
+        }
+        await dispatch(UpdateUser(formData));
         await dispatch(getUserData());
     }
 
@@ -69,6 +75,10 @@ const Settings = () => {
         inputRef.current.click();
     }
 
+
+    if(!user){
+        return <Loader/>
+    }
     return (
         <>
             <Toaster

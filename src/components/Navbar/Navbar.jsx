@@ -25,11 +25,11 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <div class="dropdown-center me-auto mb-2 mb-lg-0" style={{ zIndex: "2" }}>
-            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: "white " }}>
+          <div className="dropdown-center me-auto mb-2 mb-lg-0" style={{ zIndex: "2" }}>
+            <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: "white " }}>
               Join Us
             </button>
-            <ul class="dropdown-menu" style={{ color: "white " }}>
+            <ul className="dropdown-menu" style={{ color: "white " }}>
               <li><Link class="dropdown-item" to="/HomePage">as Technician</Link></li>
               <li><Link class="dropdown-item" to="/HomePage">as Repair Center</Link></li>
             </ul>
@@ -37,7 +37,7 @@ const Navbar = () => {
 
           <div className="dropdown-center" style={{ zIndex: "1" }}>
             {
-              user.length !== 0 ?
+              user?.length !== 0 ?
                 <>
                   <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: "white " }}>
                     <img src={img} alt="" className="rounded-circle pic w-25" />

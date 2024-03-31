@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import img from "../../assets/5098287-Photoroom.png-Photoroom.png"
-import Navbar from "../../components/Navbar/Navbar"
 import { useSelector } from "react-redux";
 import Input from "../../components/Input";
 import "./HomePage.css"
@@ -12,7 +11,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Navbar />
+      
 
       <div className="heroSection ps-5 pe-5" style={{ backgroundColor: "white", marginTop: "100px" }}>
         <div className="d-flex justify-content-center align-items-center flex-column w-50">

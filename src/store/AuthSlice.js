@@ -11,7 +11,7 @@ export const HandelLogin = createAsyncThunk(
       const response = await axios.post(
         "http://localhost:3000/user/signIn",
         formData,
-        null
+        
       );
 
       console.log("Login successful:", response.data);
@@ -260,10 +260,35 @@ export const deleteVehicle = createAsyncThunk(
   }
 );
 
+
+// &-----------------------------------------get vehicle--------------------------------------------
+
+export const VerifyAccount = createAsyncThunk(
+  "Auth/VerifyAccount",
+  async (formData) => {
+    try {
+      console.log(formData);
+      const response = await axios.post(
+        `http://localhost:3000/user/verifyEmail`,formData
+        
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during login:", error);
+
+      // Returning the error object directly is better than returning error.response
+      // It provides more detailed error information to the caller
+      return error.response || { error: "An error occurred" };
+    
+    }
+  }
+);
 let AuthSlice = createSlice({
   name: "Auth",
   initialState: {
     UserData: [],
+    VerifyData:[]
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -274,7 +299,7 @@ let AuthSlice = createSlice({
     });
     builder.addCase(HandelLogin.rejected, (state, action) => {
       state.UserData = action.payload.userData;
-      console.log(action.payload.userData);
+      console.log(action.payload);
     });
 
     // ^ Register
@@ -319,6 +344,13 @@ let AuthSlice = createSlice({
     builder.addCase(deleteVehicle.fulfilled, (state, action) => {
       state.user = action.payload.user;
       console.log(action.payload.user);
+    });
+
+
+    //^ VerifyAccount
+    builder.addCase(VerifyAccount.fulfilled, (state, action) => {
+      state.VerifyData = action.payload.data;
+      console.log(action.payload.data);
     });
   },
 });

@@ -9,17 +9,24 @@ import HomePage from './pages/HomePage/HomePage'
 import { PersistGate } from "redux-persist/integration/react"
 import Settings from './pages/Settings/Settings';
 import Vehicles from './pages/Vehicles/Vehicles';
+import VerifyEmail from './pages/VerifyEmail/VerifyEmail'
+import Layout from './components/Layout/Layout'
 
 
 function App() {
 
   let router = createBrowserRouter([
-    { path: '/', element: <Login /> },
+    // { path: '/', element: <Login /> },
     { path: '/login', element: <Login /> },
     { path: '/Register', element: <Register /> },
-    { path: '/HomePage', element: <HomePage /> },
+    {path:'/',element:<Layout/>,children:[
+      { path: '/HomePage', element: <HomePage /> },
     { path: '/Settings', element: <Settings /> },
     { path: '/Vehicles', element: <Vehicles /> },
+    { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
+    ]}
+    
+    
   ])
 
   return (
