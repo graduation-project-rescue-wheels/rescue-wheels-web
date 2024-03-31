@@ -11,6 +11,7 @@ import Settings from './pages/Settings/Settings';
 import Vehicles from './pages/Vehicles/Vehicles';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail'
 import Layout from './components/Layout/Layout'
+import RepairCenterShow from './pages/RepairCenterShow/RepairCenterShow'
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
     { path: '/Settings', element: <Settings /> },
     { path: '/Vehicles', element: <Vehicles /> },
     { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
+    { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
+
     ]}
     
     

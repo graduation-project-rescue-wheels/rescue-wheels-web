@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import AuthSlice from "./AuthSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist"
+import RepairCenterSlice from "./RepairCenterSlice";
 
 const persistConfig = {
     key: "root",
@@ -11,6 +12,8 @@ const persistConfig = {
 
 const reducer  = combineReducers({
     AuthData :AuthSlice,
+    RepairCenterData :RepairCenterSlice
+
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer);
