@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import * as YUP from "yup";
 import img1 from '../../assets/Saly-3 (1).png'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { HandelLogin } from "../../store/AuthSlice";
 import { Toaster } from "react-hot-toast";
 import Input from "../../components/Input";
