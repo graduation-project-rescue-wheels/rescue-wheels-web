@@ -1,4 +1,3 @@
-
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login/Login'
@@ -12,6 +11,12 @@ import Vehicles from './pages/Vehicles/Vehicles';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail'
 import Layout from './components/Layout/Layout'
 import RepairCenterShow from './pages/RepairCenterShow/RepairCenterShow'
+import Dashboard from './pages/Admin/Dashboard/Dashboard'
+import Auth from './pages/Admin/Auth/Auth'
+import RepairCenters from './pages/Admin/RepairCenters/RepairCenters'
+// import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
+import Requests from './pages/Admin/Requests/Requests'
+import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
 
 
 function App() {
@@ -20,16 +25,20 @@ function App() {
     // { path: '/', element: <Login /> },
     { path: '/login', element: <Login /> },
     { path: '/Register', element: <Register /> },
-    {path:'/',element:<Layout/>,children:[
-      { path: '/HomePage', element: <HomePage /> },
-    { path: '/Settings', element: <Settings /> },
-    { path: '/Vehicles', element: <Vehicles /> },
-    { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
-    { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
-
-    ]}
-    
-    
+    {
+      path: '/', element: <Layout />, children: [
+        { path: '/HomePage', element: <HomePage /> },
+        { path: '/Settings', element: <Settings /> },
+        { path: '/Vehicles', element: <Vehicles /> },
+        { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
+        { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
+      ]
+    },
+    { path: '/Dashboard', element: <Dashboard /> },
+    { path: '/Auth', element: <Auth /> },
+    { path: '/RepairCenters', element: <RepairCenters /> },
+    { path: '/Requests', element: <Requests /> },
+    { path: '/AdminSettings', element: <AdminSettings /> },
   ])
 
   return (
