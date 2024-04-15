@@ -9,6 +9,9 @@ html {
   /* background-color: #242424; */
   box-sizing: border-box;
 }
+p {
+  margin: 0 !important;
+}
 ::-webkit-scrollbar {
   width: 15px;
 }
