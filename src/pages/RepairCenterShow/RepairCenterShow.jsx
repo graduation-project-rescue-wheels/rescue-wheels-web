@@ -31,7 +31,7 @@ const RepairCenterShow = () => {
       <>
        
             <div className="mx-auto text-center mt-5">
-                <img src={image} className="w-50 h-50" alt=""/>
+                <img src={image} style={{width:'10%',height:'10%'}} className="" alt=""/>
             </div>
             <div className='col-md-6 mx-auto'>
         

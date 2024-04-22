@@ -21,7 +21,7 @@ function App() {
     { path: '/login', element: <Login /> },
     { path: '/Register', element: <Register /> },
     {path:'/',element:<Layout/>,children:[
-      { path: '/HomePage', element: <HomePage /> },
+      { path: '/', element: <HomePage /> },
     { path: '/Settings', element: <Settings /> },
     { path: '/Vehicles', element: <Vehicles /> },
     { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
