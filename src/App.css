@@ -1,4 +1,54 @@
-body{
+* {
+  --main-color: #0f0f0f;
+  --secondry-color: #d0d7d3;
+  --bs-card-border-color: transparent !important;
+}
+body {
   box-sizing: border-box;
+}
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked,
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+  color: var(--main-color) !important;
+}
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-columnHeader:focus,
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-cell:focus,
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within,
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+  outline: none !important;
+}
 
+.css-1knaqv7-MuiButtonBase-root-MuiButton-root {
+  color: var(--main-color) !important;
+}
+
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-withBorderColor {
+  border: none;
+}
+
+.css-n3fyjk-MuiDataGrid-root .MuiDataGrid-cell--textLeft {
+  position: relative;
+}
+
+.form-control:focus,
+.css-13cymwt-control:hover {
+  box-shadow: 0 0 0.5rem 0.15rem var(--secondry-color) !important;
+  border-color: var(--secondry-color) !important;
+}
+
+.css-13cymwt-control,
+.css-t3ipsp-control {
+  border-color: var(--secondry-color) !important;
+  box-shadow: none !important;
+}
+
+.table {
+  align-self: center;
+  box-shadow: 0 0 10px 2px #ccc;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.hero {
+  margin-left: 70px;
+  width: calc(100% - 70px);
 }
