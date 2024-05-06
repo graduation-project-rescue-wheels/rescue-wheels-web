@@ -10,7 +10,7 @@ a {
   width: 70px;
   min-width: 70px;
   transition: all 0.5s ease-in-out;
-  background-color: #e48700;
+  background-color: var(--main-color);
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -ms-transition: all 0.5s ease-in-out;
@@ -26,7 +26,11 @@ a {
   background-color: transparent;
   cursor: pointer;
   border: none;
-  padding: 16px 24px;
+  padding: 16px 24px 16px 19px;
+}
+
+.toggle img {
+  width: 2rem;
 }
 
 .semi-appearance {
@@ -40,10 +44,15 @@ a {
 
 .sidebar-link {
   padding: 8px 24px;
-  color: white;
+  color: var(--secondry-color) !important;
   display: block;
 }
 
 .sidebar-link:hover {
   background-color: rgba(255, 255, 255, 0.075);
+}
+
+.sidebar-link .icon {
+  color: var(--secondry-color) !important;
+  margin-right: 0.75rem;
 }
