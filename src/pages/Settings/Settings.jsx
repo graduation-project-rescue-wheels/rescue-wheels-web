@@ -116,7 +116,7 @@ const Settings = () => {
                         </button>
                     </div>
                 </nav>
-                <div className="tab-content w-75 shadow-lg" id="nav-tabContent">
+                <div className="tab-content w-75 shadow-lg bg-white" id="nav-tabContent">
                     <div className="tab-pane fade show active" id="nav-personal-information" role="tabpanel" aria-labelledby="nav-personal-information-tab" tabIndex="0">
                         <div className="card mb-3" style={{ border: "none" }}>
                             <div className="row g-0">
