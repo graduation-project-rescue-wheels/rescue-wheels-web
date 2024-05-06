@@ -1,0 +1,114 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+// & ======================= AddRequest =======================
+export const AddRequest = createAsyncThunk(
+    "EmergencyRequest/AddRequest",
+    async(formData)=>{
+        try{
+            const body = formData;
+             const response = await axios.put("http://localhost:3000/emrgencyRequest/addRequest",body,{
+                    headers:{
+                        accesstoken:"prefixToken_"+localStorage.getItem("Token")
+                    }
+             })
+             console.log("All Repair Centers:",response.data)
+             return response.data
+        }catch(error){
+            console.error('Error during Send:', error);
+            return error.response || { error: 'An error occurred' };
+        }
+    }
+)
+
+
+
+// & ======================= AddRequest =======================
+export const getNearByRequests = createAsyncThunk(
+    "EmergencyRequest/getNearByRequests",
+    async({long,lat})=>{
+        try{
+             const response = await axios.get(`http://localhost:3000/emrgencyRequest/nearbyRequests/${long}/${lat}`,{
+                    headers:{
+                        accesstoken:"prefixToken_"+localStorage.getItem("Token")
+                    }
+             })
+             console.log("All Requests :",response.data)
+             return response.data
+        }catch(error){
+            console.error('Error during Send:', error);
+            return error.response || { error: 'An error occurred' };
+        }
+    }
+)
+
+
+
+// & ======================= AddRequest =======================
+export const acceptRequest = createAsyncThunk(
+    "EmergencyRequest/acceptRequest",
+    async(formdata)=>{
+        const body = formdata;
+        try{
+             const response = await axios.get(`http://localhost:3000/emrgencyRequest/acceptRequest/`,body,{
+                    headers:{
+                        accesstoken:"prefixToken_"+localStorage.getItem("Token")
+                    }
+             })
+             console.log("All Requests :",response.data)
+             return response.data
+        }catch(error){
+            console.error('Error during Send:', error);
+            return error.response || { error: 'An error occurred' };
+        }
+    }
+)
+
+let EmergencyRequestSlice = createSlice({
+    name:"EmergencyRequest",
+    initialState:{
+        AddRequestData:[],
+        getNearByRequestsData:[],
+        acceptRequestData:[]
+    },
+    extraReducers:(builder)=>{
+        // ^ GetAllVehicles
+        builder.addCase(AddRequest.fulfilled,(state,action)=>{
+            state.AddRequestData=action.payload   
+            console.log(action.payload);
+        })
+        builder.addCase(AddRequest.rejected,(state,action)=>{
+            state.AddRequestData = action.payload
+            console.log(action.payload);
+    
+        })
+        //^ getNearByRequests
+        builder.addCase(getNearByRequests.fulfilled,(state,action)=>{
+            state.getNearByRequestsData=action.payload   
+            console.log(action.payload);
+        })
+        builder.addCase(getNearByRequests.rejected,(state,action)=>{
+            state.getNearByRequestsData = action.payload
+            console.log(action.payload);
+    
+        })
+
+        // ^ accept request
+        builder.addCase(acceptRequest.fulfilled,(state,action)=>{
+            state.acceptRequestData=action.payload   
+            console.log(action.payload);
+        })
+        builder.addCase(acceptRequest.rejected,(state,action)=>{
+            state.acceptRequestData = action.payload
+            console.log(action.payload);
+    
+        })
+
+
+        acceptRequest
+
+        
+    }
+})
+
+
+export default EmergencyRequestSlice.reducer
