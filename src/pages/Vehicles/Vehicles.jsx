@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./Vehicles.css";
 import AddIcon from '@mui/icons-material/Add';
-import VehicleItem from "../../components/VehicleItem";
+import VehicleItem from "../../components/VehicleItem/VehicleItem";
 
 
 const Vehicles = () => {
