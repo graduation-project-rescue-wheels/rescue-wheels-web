@@ -17,6 +17,8 @@ import RepairCenters from './pages/Admin/RepairCenters/RepairCenters'
 // import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
 import Requests from './pages/Admin/Requests/Requests'
 import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
+import Emergency from './pages/Emergency/Emergency'
+import Technician from './pages/Technician/Technician'
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
         { path: '/Vehicles', element: <Vehicles /> },
         { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
+        { path: "Emergency", element: <Emergency /> },
+        { path: "Technician", element: <Technician /> },
       ]
     },
     { path: '/Dashboard', element: <Dashboard /> },
