@@ -13,11 +13,11 @@ p {
   margin: 0 !important;
 }
 ::-webkit-scrollbar {
-  width: 15px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
   background: white;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e48700;
+  background: var(--main-color);
 }
