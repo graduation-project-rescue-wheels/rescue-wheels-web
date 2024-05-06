@@ -1,13 +1,6 @@
-.form-control:focus {
-  box-shadow: 0 0 0 0.25rem #e487003d !important;
-  border-color: #e48700 !important;
-}
-.dropdown-item:active {
-  background-color: #e48700 !important;
-}
 .nav {
-  --bs-nav-link-color: #e48700 !important;
-  --bs-nav-link-hover-color: #b48030 !important;
+  --bs-nav-link-color: var(--secondry-color) !important;
+  --bs-nav-link-hover-color: var(--secondry-color) !important;
 }
 .image::after {
   content: "Change Photo";
