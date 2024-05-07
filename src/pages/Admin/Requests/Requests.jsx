@@ -54,6 +54,7 @@ const Requests = () => {
       width: 250,
       renderCell: (params) => (
         <GoogleMap
+        dispatch={dispatch}
           initialCenter={{
             lat: params.row.coordinates.latitude,
             lng: params.row.coordinates.longitude,

@@ -5,7 +5,7 @@ import { showErrorToast, showSuccessToast } from "./../components/toast";
 // &----------------------------------------- Login --------------------------------------------
 
 export const HandelLogin = createAsyncThunk(
-  "auth/handleLogin",
+  "Auth/handleLogin",
   async (formData) => {
     try {
       const response = await axios.post(
@@ -54,7 +54,7 @@ export const HandelRegister = createAsyncThunk(
 // &-----------------------------------------Update Info--------------------------------------------
 
 export const UpdateUser = createAsyncThunk(
-  "user/updateUserAsync",
+  "Auth/updateUserAsync",
   async (formData) => {
     let body = formData;
     const accessToken = await localStorage.getItem("Token");
@@ -89,7 +89,7 @@ export const UpdateUser = createAsyncThunk(
 // &-----------------------------------------Update Password--------------------------------------------
 
 export const UpdatePassword = createAsyncThunk(
-  "user/updatePasswordAsync",
+  "Auth/UpdatePassword",
   async (formData) => {
     let body = formData;
     const accessToken = await localStorage.getItem("Token");
@@ -125,7 +125,7 @@ export const UpdatePassword = createAsyncThunk(
 // &-----------------------------------------get user data--------------------------------------------
 
 export const getUserData = createAsyncThunk(
-  "user/getUserDataAsync",
+  "Auth/getUserData",
   async () => {
     const accessToken = await localStorage.getItem("Token");
     try {
@@ -154,7 +154,7 @@ export const getUserData = createAsyncThunk(
 // &-------------------------------------------------------------------------------------
 
 export const DeleteUserById = createAsyncThunk(
-  "user/DeleteUserById",
+  "Auth/DeleteUserById",
   async (id) => {
     const accessToken = await localStorage.getItem("Token");
     try {
@@ -184,134 +184,7 @@ export const DeleteUserById = createAsyncThunk(
   }
 );
 
-// &-----------------------------------------add vehicle--------------------------------------------
 
-export const addVehicle = createAsyncThunk(
-  "user/addVehicleAsync",
-  async (formData) => {
-    let body = formData;
-    console.log(body);
-    const accessToken = await localStorage.getItem("Token");
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/user/addVehicle",
-        body,
-        {
-          headers: {
-            accesstoken: "prefixToken_" + accessToken,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        showSuccessToast(response.data.message);
-      }
-
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      if (error.response.status === 400) {
-        showErrorToast(error.response.data.errorMessage);
-      } else {
-        showErrorToast(error.response.data.errMsg);
-      }
-      return error.response.data;
-    }
-  }
-);
-
-// &-------------------------------------------------------------------------------------
-
-// &-----------------------------------------get vehicle--------------------------------------------
-
-export const getVehicleById = createAsyncThunk(
-  "vehicle/getVehicleByIdAsync",
-  async (id) => {
-    const accessToken = await localStorage.getItem("Token");
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/vehicle/getVehicleById/${id}`,
-        {
-          headers: {
-            accesstoken: "prefixToken_" + accessToken,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        showSuccessToast(response.data.message);
-      }
-
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      if (error.response.status === 400) {
-        showErrorToast(error.response.data.errorMessage);
-      } else {
-        showErrorToast(error.response.data.errMsg);
-      }
-      return error.response.data;
-    }
-  }
-);
-
-// &-------------------------------------------------------------------------------------
-
-// &-----------------------------------------delete vehicle--------------------------------------------
-
-export const deleteVehicle = createAsyncThunk(
-  "vehicle/deleteVehicleAsync",
-  async (id) => {
-    const accessToken = await localStorage.getItem("Token");
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/vehicle/deleteVehicle/${id}`,
-        {
-          headers: {
-            accesstoken: "prefixToken_" + accessToken,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        showSuccessToast(response.data.message);
-      }
-
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      if (error.response.status === 400) {
-        showErrorToast(error.response.data.errorMessage);
-      } else {
-        showErrorToast(error.response.data.errMsg);
-      }
-      return error.response.data;
-    }
-  }
-);
-
-// &-----------------------------------------get vehicle--------------------------------------------
-
-export const VerifyAccount = createAsyncThunk(
-  "Auth/VerifyAccount",
-  async (formData) => {
-    try {
-      console.log(formData);
-      const response = await axios.post(
-        `http://localhost:3000/user/verifyEmail`,
-        formData
-      );
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error during login:", error);
-
-      // Returning the error object directly is better than returning error.response
-      // It provides more detailed error information to the caller
-      return error.response || { error: "An error occurred" };
-    }
-  }
-);
 
 // & ======================= Get All Users =======================
 export const GetAllUsers = createAsyncThunk(
@@ -335,6 +208,28 @@ export const GetAllUsers = createAsyncThunk(
   }
 );
 
+// &-----------------------------------------VerifyAccount--------------------------------------------
+
+export const VerifyAccount = createAsyncThunk(
+  "Auth/VerifyAccount",
+  async (formData) => {
+    try {
+      console.log(formData);
+      const response = await axios.post(
+        `http://localhost:3000/user/verifyEmail`,
+        formData
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during login:", error);
+
+      // Returning the error object directly is better than returning error.response
+      // It provides more detailed error information to the caller
+      return error.response || { error: "An error occurred" };
+    }
+  }
+);
 let AuthSlice = createSlice({
   name: "Auth",
   initialState: {
@@ -391,24 +286,12 @@ let AuthSlice = createSlice({
       state.AllUsers = action.payload.data;
       console.log(action.payload.data);
     });
-
-    // ^ AddVehicle
-    builder.addCase(addVehicle.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-      console.log(action.payload.user);
-    });
-
-    // ^ DeleteVehicle
-    builder.addCase(deleteVehicle.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-      console.log(action.payload.user);
-    });
-
-    //^ VerifyAccount
-    builder.addCase(VerifyAccount.fulfilled, (state, action) => {
-      state.VerifyData = action.payload.data;
-      console.log(action.payload.data);
-    });
+  //^ VerifyAccount
+  builder.addCase(VerifyAccount.fulfilled, (state, action) => {
+    state.VerifyData = action.payload.data;
+    console.log(action.payload.data);
+  });
+  
   },
 });
 export default AuthSlice.reducer;

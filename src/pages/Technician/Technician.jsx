@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getNearByRequests } from "../../store/EmergencyRequestSlice"
+import { acceptRequest, cancelResponder, getNearByRequests } from "../../store/EmergencyRequestSlice"
 import GoogleMap from "../RepairCenterShow/GoogleMap";
 import io from 'socket.io-client';
 import tmpImage from '../../assets/usertemp.png'
@@ -14,46 +14,102 @@ const socket = io('http://localhost:3000/',{
 });
 const Technician = () => {
   const dispatch = useDispatch()
+  const [currentLocation, setCurrentLocation] = useState(null);
+
   const { lat, lng } = useSelector(x=>x.MapController)
 
   const [NearByRequest , setNearByRequest]=useState([])
   const [haveRequest, sethaveRequest] = useState(false);
+  const [accept,setAccept] = useState(false)
   const FetchNearByRequests = async()=>{
     const res = await dispatch(getNearByRequests({long : lng , lat : lat}))
     console.log(res);
-    setNearByRequest(res.payload.requests)
+    // setNearByRequest(res.payload.requests)
     console.log(NearByRequest);
     
+  }
+  const destinationLocation = { lat: 34.0522, lng: -118.2437 };
+  const acceptRequestt=async(id)=>{
+    const formdata = {id}
+    const res =  await dispatch(acceptRequest(formdata))
+    console.log(res);
+    if(res.payload.request.state === "inProgress"){
+      setAccept(true)
+    }
+  }
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentLocation({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error('Error getting the current location:', error);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  };
+  const handleCancleRequset =async(id)=>{
+    const formData  = { id : id}
+    const res = await dispatch(cancelResponder(formData))
+    console.log(res);
+    setNearByRequest([])
+    setAccept(false)
   }
 
   // const acceptRequest
   useEffect(() => {
+    getCurrentLocation()
     FetchNearByRequests();
     socket.connect()
   
     socket.on('request:add', (request) => {
-      setNearByRequest(request)
+      const v =[] 
+      
+      v.push(request)
+      setNearByRequest(v)
+      // setNearByRequest(request)
         console.log('New request added:', request);
-          if(NearByRequest){
-          sethaveRequest(true)
-          NearByRequest.push(request)
-          console.log(NearByRequest);
-        }else{
-          sethaveRequest(false)
-        }
+        sethaveRequest(true)
+        // setNearByRequest(request)
+         
     });
 
+    socket.on('request:cancelled', (request) => {
+      console.log(request);
+      if(request.state == "pending"){
+        setNearByRequest(request)
+      }else{
+        setNearByRequest({})
+      }
+      setAccept(false)
+
+      
+         
+    });
     return () => {
         socket.off('request:add');
+        socket.off('request:cancelled');
     };
+    
     
 }, []);
   return (
-    <div className="position-relative w-100 overflow-scroll" style={{height:'90vh'}}>
-    <GoogleMap zoom={10}/>
-    <div style={{  bottom: 60, left: 20 }} className="rounded-4 d-flex py-4 justify-content-center align-items-end w-25 bg-white border p-2 border-2 position-absolute">
+    <div className="position-relative w-100 " style={{height:'90vh'}}>
+<GoogleMap 
+        initialCenter={currentLocation}
+          markerPosition={currentLocation}
+          dispatch={dispatch}
+          clickedMarkerPosition={destinationLocation}
+
+          
+    />
+    <div style={{  bottom: 60, left: 20 ,overflow:'hidden'}} className="rounded-4  d-flex py-4 justify-content-center align-items-end w-25 bg-white border p-2 border-2 position-absolute">
       
-      {NearByRequest ? 
+    {NearByRequest?.length ? 
       <div><div className="text-start w-100" >
         <h5  style={{color:'#e48700'}}>Request details</h5>
 
@@ -85,8 +141,14 @@ const Technician = () => {
        <p className="text-secondary"> Car Number</p>
        <p className="text-bold ms-3"> {request?.vehicle?.licensePlate}</p>
        </div>
+        {accept? 
+          <div>
+          <h5 className="mt-3">Request Accepted</h5>
+      <button className="btn btn-danger my-3 w-100" onClick={()=>handleCancleRequset(request._id)}>Cancle</button>
 
-       <button className="w-100 btn mt-3 rounded-4 text-white" style={{backgroundColor:"#e48700"}}>Accept Request</button>
+          </div>
+:       <button onClick={()=>acceptRequestt(request._id)} className="w-100 btn mt-3 rounded-4 text-white" style={{backgroundColor:"#e48700"}}>Accept Request</button>
+}
      </div>
      })}
  

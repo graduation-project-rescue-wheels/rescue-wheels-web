@@ -7,6 +7,8 @@ import { Table } from 'react-bootstrap';
 import { Paper, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 const RepairCenterShow = () => {
+  const [currentLocation, setCurrentLocation] = useState(null);
+
     const { id } = useParams();
     const dispatch = useDispatch();
     const [repairData, setRepairData] = useState([]);
@@ -20,12 +22,27 @@ const RepairCenterShow = () => {
             setImage(res.payload.data.Image.secure_url);
             setDataFetched(false)
     };
-
+    const getCurrentLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setCurrentLocation({ lat: latitude, lng: longitude });
+          },
+          (error) => {
+            console.error('Error getting the current location:', error);
+          }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    };
     useEffect(() => {
         fetchRepairData();
+        getCurrentLocation()
     }, [dataFetched]);
-    const initialCenter = { lat: 30.0444, lng: 31.2357 }; 
-    const markerPosition = { lat: 30.0444, lng: 31.2357 }; 
+    const initialCenter = currentLocation; 
+    const markerPosition = currentLocation; 
 
     return (
       <>
@@ -66,7 +83,7 @@ const RepairCenterShow = () => {
          
            </div>
   <div className="mt-5 bg-black d-block ">
-                <GoogleMap  initialCenter={initialCenter} markerPosition={markerPosition} />
+                <GoogleMap dispatch={dispatch}  initialCenter={initialCenter} markerPosition={markerPosition} />
             </div>
           
       </>
