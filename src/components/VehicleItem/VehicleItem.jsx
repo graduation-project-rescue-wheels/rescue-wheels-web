@@ -5,8 +5,9 @@ import EvStationIcon from '@mui/icons-material/EvStation';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { useEffect, useState } from 'react'
-import { deleteVehicle, getUserData, getVehicleById } from '../../store/AuthSlice';
 import { useDispatch } from 'react-redux';
+import { deleteVehicle, getVehicleById } from '../../store/VehicleSlice';
+import { getUserData } from '../../store/AuthSlice';
 
 const VehicleItem = ({ id }) => {
     const [vehicle, setVehicle] = useState(null)

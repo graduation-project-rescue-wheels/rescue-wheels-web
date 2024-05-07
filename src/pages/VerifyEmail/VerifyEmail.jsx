@@ -15,9 +15,9 @@ import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { VerifyAccount } from "../../store/AuthSlice";
 import { Toaster } from "react-hot-toast";
 import { showErrorToast, showSuccessToast } from "../../components/toast";
+import { VerifyAccount } from "../../store/AuthSlice";
 const VerifyEmail = () => {
   const [verifyImage, setVerifyImage] = useState(verifyImageWait);
   const [loading, setloading] = useState(false);

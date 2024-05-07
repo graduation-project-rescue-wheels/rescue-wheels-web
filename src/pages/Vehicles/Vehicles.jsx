@@ -3,11 +3,12 @@ import * as YUP from "yup";
 import Navbar from "../../components/Navbar/Navbar"
 import Input from './../../components/Input';
 import { useState } from 'react';
-import { addVehicle, getUserData, getVehicleById } from "../../store/AuthSlice";
+import { addVehicle } from "../../store/VehicleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./Vehicles.css";
 import AddIcon from '@mui/icons-material/Add';
+import { getUserData } from "../../store/AuthSlice";
 import VehicleItem from "../../components/VehicleItem/VehicleItem";
 
 
@@ -29,7 +30,8 @@ const Vehicles = () => {
             type: "",
             energySource: "",
             licensePlate: "",
-            owner: user._id
+            owner: user._id,
+            modelYear:""
         },
         validationSchema,
         onSubmit: handleFormSubmitVehicleAdd,
@@ -49,8 +51,7 @@ const Vehicles = () => {
                 position="top-center"
                 reverseOrder={false}
             />
-            {/* <Navbar /> */}
-            <h2 className="text-center" style={{ marginTop: "20px" }}>My Vehicles</h2>
+            <h2 className="text-center mt-3" >My Vehicles</h2>
             <div className="card w-75 mb-3  border-0 ms-auto shadow-lg me-auto mt-3">
                 <div className="card-body position-relative d-flex flex-column align-items-center" style={{ height: "75vh" }}>
                     <div className="cards w-100 d-flex flex-column mt-3 align-items-center overflow-y-scroll" style={{ height: "80%" }}>
@@ -59,7 +60,7 @@ const Vehicles = () => {
                                 <p className="card-text" style={{ justifySelf: "center" }}>There are no registered vehicles</p>
                                 :
                                 user.vehicles_IDS.map((id) => {
-                                    return <VehicleItem id={id} />
+                                    return <VehicleItem key={id._id} id={id} />
                                 })
                         }
                     </div>
@@ -103,6 +104,17 @@ const Vehicles = () => {
                                         value={VehicleAdd.values.model}
                                         formT={VehicleAdd.touched.model}
                                         formE={VehicleAdd.errors.model}
+                                    />
+                                    <Input
+                                        text={"Modal Year"}
+                                        type='modelYear'
+                                        name='modelYear'
+                                        id='modelYear'
+                                        onChange={VehicleAdd.handleChange}
+                                        onBlur={VehicleAdd.handleBlur}
+                                        value={VehicleAdd.values.modelYear}
+                                        formT={VehicleAdd.touched.modelYear}
+                                        formE={VehicleAdd.errors.modelYear}
                                     />
                                     <Input
                                         text={"License Plate"}

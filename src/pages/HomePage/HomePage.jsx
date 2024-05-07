@@ -27,9 +27,9 @@ const HomePage = () => {
       <div className="container mt-5 ">
       <h2 className="fw-bold">Repair Centers</h2>
         <div className="row gy-3">
-          {repairCenterData.map((el)=>{
+          {repairCenterData?.map((el)=>{
             return <div key={el._id}  className="col-md-3">
-          <RepairCenterComponent id={el._id} name= {el.name} description={el.description} image={el.Image.secure_url}/>
+          <RepairCenterComponent id={el._id} name= {el.name} description={el.description} image={el.Image?.secure_url}/>
           </div>
           })}
         

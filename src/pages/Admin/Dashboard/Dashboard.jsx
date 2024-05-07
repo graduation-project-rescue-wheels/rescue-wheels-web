@@ -57,6 +57,7 @@ const Dashboard = () => {
       width: 230,
       renderCell: (params) => (
         <GoogleMap
+         dispatch={dispatch}
           initialCenter={{
             lat: params.row.coordinates.latitude,
             lng: params.row.coordinates.longitude,
@@ -75,7 +76,8 @@ const Dashboard = () => {
       width: 230,
       renderCell: (params) =>
         params.dropOffLocation ? (
-          <GoogleMap
+          <GoogleMap 
+          dispatch={dispatch}
             initialCenter={{
               lat: params.row.dropOffLocation.latitude,
               lng: params.row.dropOffLocation.longitude,

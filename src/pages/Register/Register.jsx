@@ -50,7 +50,7 @@ const Register = () => {
     setLoading(false);
     console.log(res);
     // & Toastify  
-    if (res.payload.status === 201) {
+    if (res.payload.status) {
       showSuccessToast(res.payload.data.message);
       setTimeout(() => {
         navigate("/login")
