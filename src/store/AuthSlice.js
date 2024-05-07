@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { showErrorToast, showSuccessToast } from './../components/toast';
+import { showErrorToast, showSuccessToast } from "./../components/toast";
 
 // &----------------------------------------- Login --------------------------------------------
 
@@ -10,8 +10,7 @@ export const HandelLogin = createAsyncThunk(
     try {
       const response = await axios.post(
         "http://localhost:3000/user/signIn",
-        formData,
-        
+        formData
       );
 
       console.log("Login successful:", response.data);
@@ -154,6 +153,37 @@ export const getUserData = createAsyncThunk(
 
 // &-------------------------------------------------------------------------------------
 
+export const DeleteUserById = createAsyncThunk(
+  "user/DeleteUserById",
+  async (id) => {
+    const accessToken = await localStorage.getItem("Token");
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/user/DeleteUserById/${id}`,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + accessToken,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        showSuccessToast(response.data.message);
+      }
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+      return error.response.data;
+    }
+  }
+);
+
 // &-----------------------------------------add vehicle--------------------------------------------
 
 export const addVehicle = createAsyncThunk(
@@ -227,7 +257,7 @@ export const getVehicleById = createAsyncThunk(
 
 // &-------------------------------------------------------------------------------------
 
-// &-----------------------------------------get vehicle--------------------------------------------
+// &-----------------------------------------delete vehicle--------------------------------------------
 
 export const deleteVehicle = createAsyncThunk(
   "vehicle/deleteVehicleAsync",
@@ -260,7 +290,6 @@ export const deleteVehicle = createAsyncThunk(
   }
 );
 
-
 // &-----------------------------------------get vehicle--------------------------------------------
 
 export const VerifyAccount = createAsyncThunk(
@@ -269,8 +298,8 @@ export const VerifyAccount = createAsyncThunk(
     try {
       console.log(formData);
       const response = await axios.post(
-        `http://localhost:3000/user/verifyEmail`,formData
-        
+        `http://localhost:3000/user/verifyEmail`,
+        formData
       );
       console.log(response.data);
       return response.data;
@@ -280,15 +309,38 @@ export const VerifyAccount = createAsyncThunk(
       // Returning the error object directly is better than returning error.response
       // It provides more detailed error information to the caller
       return error.response || { error: "An error occurred" };
-    
     }
   }
 );
+
+// & ======================= Get All Users =======================
+export const GetAllUsers = createAsyncThunk(
+  "Auth/GetAllUsers",
+  async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/user/GetAllUsers",
+        {
+          headers: {
+            accesstoken: "prefixToken_" + localStorage.getItem("Token"),
+          },
+        }
+      );
+      console.log("All Users:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during login:", error);
+      return error.response || { error: "An error occurred" };
+    }
+  }
+);
+
 let AuthSlice = createSlice({
   name: "Auth",
   initialState: {
     UserData: [],
-    VerifyData:[]
+    VerifyData: [],
+    AllUsers: []
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -334,6 +386,12 @@ let AuthSlice = createSlice({
       console.log(action.payload.data);
     });
 
+    // ^ GetAllUsers
+    builder.addCase(GetAllUsers.fulfilled, (state, action) => {
+      state.AllUsers = action.payload.data;
+      console.log(action.payload.data);
+    });
+
     // ^ AddVehicle
     builder.addCase(addVehicle.fulfilled, (state, action) => {
       state.user = action.payload.user;
@@ -345,7 +403,6 @@ let AuthSlice = createSlice({
       state.user = action.payload.user;
       console.log(action.payload.user);
     });
-
 
     //^ VerifyAccount
     builder.addCase(VerifyAccount.fulfilled, (state, action) => {

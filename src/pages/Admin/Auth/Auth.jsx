@@ -1,392 +1,94 @@
-import { useMemo, useState } from 'react'
-import Sidebar from '../../../components/Sidebar/Sidebar'
-import AdminNav from '../../../components/AdminNav/AdminNav'
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
-import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
+import * as React from "react";
+import AdminNav from "../../../components/AdminNav/AdminNav";
+import img from "../../../assets/143086968_2856368904622192_1959732218791162458_n.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { GetAllUsers, DeleteUserById } from "../../../store/AuthSlice";
+import { Toaster } from "react-hot-toast";
+import TableComponent from "../../../components/TableComponent/TableComponent";
 
-function createData(id, pic, userName, email, phoneNumber, requestsNumber) {
-  return {
-    id,
-    pic,
-    userName,
-    email,
-    phoneNumber,
-    requestsNumber,
-  };
-}
-
-const rows = [
-  createData(1, "-", "-", "-", "-", "-"),
-  createData(2, "-", "-", "-", "-", "-"),
-  createData(3, "-", "-", "-", "-", "-"),
-  createData(4, "-", "-", "-", "-", "-"),
-  createData(5, "-", "-", "-", "-", "-"),
-  createData(6, "-", "-", "-", "-", "-"),
-  createData(7, "-", "-", "-", "-", "-"),
-  createData(8, "-", "-", "-", "-", "-"),
-  createData(9, "-", "-", "-", "-", "-"),
-  createData(10, "-", "-", "-", "-", "-"),
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-const headCells = [
+const columns = [
   {
-    id: 'id',
-    numeric: false,
-    disablePadding: true,
-    label: 'ID',
-  },
-  {
-    id: 'userName',
-    numeric: false,
-    disablePadding: false,
-    label: 'User Name',
-  },
-  {
-    id: 'pic',
-    numeric: false,
-    disablePadding: false,
-    label: 'Pic',
-  },
-  {
-    id: 'email',
-    numeric: false,
-    disablePadding: false,
-    label: 'Email',
-  },
-  {
-    id: 'phoneNumber',
-    numeric: false,
-    disablePadding: false,
-    label: 'Phone Number',
-  },
-  {
-    id: 'requestsNumber',
-    numeric: false,
-    disablePadding: false,
-    label: 'No. of Requests',
-  },
-];
-
-function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-  const [auth, setAuth] = useState('');
-
-  const handleChange = (event) => {
-    setAuth(event.target.value);
-  };
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-        display: "flex",
-        justifyContent: "space-between"
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
+    field: "pic",
+    headerName: "Pic",
+    width: 70,
+    renderCell: (params) =>
+      params.pic ? (
+        <img
+          src={params.pic}
+          alt=""
+          className="rounded-circle pic"
+          style={{ width: "2rem" }}
+        />
       ) : (
-        <FormControl sx={{ m: 1, Width: 120 }}>
-          <Select
-            value={auth}
-            onChange={handleChange}
-
-          >
-            <MenuItem value="Users">Users</MenuItem>
-            <MenuItem value="Technicians">Technicians</MenuItem>
-          </Select>
-        </FormControl>
-      )}
-
-      {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
+        <img
+          src={img}
+          alt=""
+          className="rounded-circle pic"
+          style={{ width: "2rem" }}
+        />
+      ),
+  },
+  {
+    field: "fullName",
+    headerName: "Full name",
+    width: 180,
+    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
+  },
+  { field: "email", headerName: "Email", width: 240 },
+  { field: "role", headerName: "Role", width: 180 },
+  { field: "mobileNumber", headerName: "Mobile Number", width: 180 },
+  {
+    field: "Requests_IDS_Length",
+    headerName: "No. Of Requests",
+    width: 180,
+    valueGetter: (value, row) => `${row.Requests_IDS.length}`,
+  },
+];
 
 const Auth = () => {
+  const [rows, setRows] = useState([]);
+  const signedUser = useSelector((state) => state.AuthData.UserData);
+  const AllUsers = useSelector((state) => state.AuthData.AllUsers);
 
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
-  const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const dispatch = useDispatch();
 
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
+  const filterAuths = (auths) => {
+    if (signedUser.role === "Admin") {
+      setRows(auths.filter((auth) => auth.role !== "SuperAdmin"));
+    } else {
+      setRows(auths);
     }
-    setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
+  const getAllUsers = async () => {
+    const res = await dispatch(GetAllUsers());
+    filterAuths(res.payload.data);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const deleteSelectedUsers = async (selected) => {
+    selected.forEach(async (e) => {
+      await dispatch(DeleteUserById(e));
+      getAllUsers();
+    });
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage],
-  );
+  useEffect(() => {
+    filterAuths(AllUsers);
+  }, []);
 
   return (
-    <div className="d-flex" style={{ minHeight: "100vh" }}>
-      <Sidebar />
-      <div className="d-flex flex-column row-gap-1 hero" style={{ marginLeft: "70px", width: "calc(100% - 70px)" }}>
-        <AdminNav name="Auth" />
-        <Box sx={{ width: '98%', alignSelf: "center" }}>
-          <Paper sx={{ width: '100%', mb: 2 }}>
-            <EnhancedTableToolbar numSelected={selected.length} />
-            <TableContainer>
-              <Table
-                sx={{ minWidth: 750 }}
-                aria-labelledby="tableTitle"
-                size={'medium'}
-              >
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-                <TableBody>
-                  {visibleRows.map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <AdminNav name="Auth" />
+      <TableComponent
+        rows={rows}
+        columns={columns}
+        rowHeight={52}
+        func={deleteSelectedUsers}
+      />
+    </>
+  );
+};
 
-                    return (
-                      <TableRow
-                        hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
-                        sx={{ cursor: 'pointer' }}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.id}
-                        </TableCell>
-                        <TableCell align="Left">{row.userName}</TableCell>
-                        <TableCell align="Left">{row.pic}</TableCell>
-                        <TableCell align="Left">{row.email}</TableCell>
-                        <TableCell align="Left">{row.phoneNumber}</TableCell>
-                        <TableCell align="Left">{row.requestsNumber}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: 53 * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </Box>
-      </div>
-    </div>
-  )
-}
-
-
-
-export default Auth
+export default Auth;

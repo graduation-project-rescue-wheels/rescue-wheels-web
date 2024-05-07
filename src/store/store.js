@@ -1,28 +1,43 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import AuthSlice from "./AuthSlice";
 import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist"
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import RepairCenterSlice from "./RepairCenterSlice";
 import MapSlice from "./MapSlice";
+import EmergencyRequestSlice from "./EmergencyRequestSlice";
 
 const persistConfig = {
-    key: "root",
-    version: 1,
-    storage
-}
+  key: "root",
+  version: 1,
+  storage,
+};
 
-const reducer  = combineReducers({
-    AuthData :AuthSlice,
-    RepairCenterData :RepairCenterSlice,
-    MapController : MapSlice
-
-
-})
+const reducer = combineReducers({
+  AuthData: AuthSlice,
+  RepairCenterData: RepairCenterSlice,
+  MapController: MapSlice,
+  EmergencyRequests: EmergencyRequestSlice,
+});
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const ConfigStore = configureStore({
-    reducer: persistedReducer,
-})
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
-export const persistor = persistStore(ConfigStore)
+export const persistor = persistStore(ConfigStore);

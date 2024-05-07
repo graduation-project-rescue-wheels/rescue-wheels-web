@@ -1,78 +1,76 @@
-import { useEffect } from "react"
-import "./Sidebar.css"
-import Home from '@mui/icons-material/Home';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import GroupIcon from '@mui/icons-material/Group';
-import CarRepairIcon from '@mui/icons-material/CarRepair';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from "react-router-dom";
-
+import { useRef } from "react";
+import "./Sidebar.css";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import GroupIcon from "@mui/icons-material/Group";
+import CarRepairIcon from "@mui/icons-material/CarRepair";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logoo.png"
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const sideBarRef = useRef(null);
 
-    useEffect(() => {
-        const btn = document.querySelector(".toggle");
+  const handlelogout = () => {
+    localStorage.removeItem("Token");
+    localStorage.removeItem("persist:root");
+    localStorage.removeItem("currentUser");
+    navigate("/login");
+  };
 
-        if (window.innerWidth > 550) {
-            console.log(window.innerWidth);
-            btn.addEventListener("click", function () {
-                document.querySelector(".sidebar").classList.toggle("expand");
-                document.querySelector(".hero").classList.toggle("semi-appearance");
-            });
-        }
-    },[])
-    return (
-        <div className="sidebar d-flex flex-column overflow-hidden">
-            <div className="d-flex">
-                <button className="toggle" type="button">
-                    <Home style={{ color: "white", marginRight: "0.75rem" }} />
-                </button>
-                <div className="sidebar-logo my-auto mx-0 fw-bold">
-                    <Link to="/dashboard" style={{ color: "white" }}>Rescue Wheels</Link >
-                </div>
-            </div>
-            <ul className="sidebar-nav flex-grow-1 py-5 px-0">
-                <li className="sidebar-item">
-                    <Link to="/Dashboard" className="sidebar-link">
-                        <DashboardIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                        <span>Dashboard</span>
-                    </Link >
-                </li>
-                <li className="sidebar-item">
-                    <Link to="/Auth" className="sidebar-link">
-                        <GroupIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                        <span>Auth</span>
-                    </Link >
-                </li>
-                <li className="sidebar-item">
-                    <Link to="/RepairCenters" className="sidebar-link">
-                        <CarRepairIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                        <span>Repair Centers</span>
-                    </Link >
-                </li>
-                <li className="sidebar-item">
-                    <Link to="/Requests" className="sidebar-link">
-                        <ContentPasteIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                        <span>Requests</span>
-                    </Link >
-                </li>
-                <li className="sidebar-item">
-                    <Link to="/AdminSettings" className="sidebar-link">
-                        <SettingsIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                        <span>Setting</span>
-                    </Link >
-                </li>
-            </ul>
-            <div className="sidebar-footer">
-                <Link className="sidebar-link">
-                    <LogoutIcon style={{ color: "white", marginRight: "0.75rem" }} />
-                    <span>Logout</span>
-                </Link >
-            </div>
+  const handleSidebarExpand = () => {
+    if (window.innerWidth > 550) {
+      sideBarRef.current.classList.toggle("expand");
+    }
+  }
+
+  return (
+    <div ref={sideBarRef} className="sidebar d-flex flex-column overflow-hidden">
+      <div className="d-flex">
+        <button className="toggle" type="button" onClick={handleSidebarExpand}>
+          <img src={logo} alt="" />
+        </button>
+        <div className="sidebar-logo my-auto mx-0 fw-bold">
+          <Link to="/Admin/dashboard" style={{ color: "var(--secondry-color)" }}>
+            Rescue Wheels
+          </Link>
         </div>
-    )
-}
+      </div>
+      <ul className="sidebar-nav flex-grow-1 py-5 px-0">
+        <li className="sidebar-item">
+          <Link to="/Admin/Dashboard" className="sidebar-link">
+            <DashboardIcon className="icon" />
+            <span>Dashboard</span>
+          </Link>
+        </li>
+        <li className="sidebar-item">
+          <Link to="/Admin/Auth" className="sidebar-link">
+            <GroupIcon className="icon" />
+            <span>Auth</span>
+          </Link>
+        </li>
+        <li className="sidebar-item">
+          <Link to="/Admin/RepairCenters" className="sidebar-link">
+            <CarRepairIcon className="icon" />
+            <span>Repair Centers</span>
+          </Link>
+        </li>
+        <li className="sidebar-item">
+          <Link to="/Admin/Requests" className="sidebar-link">
+            <ContentPasteIcon className="icon" />
+            <span>Requests</span>
+          </Link>
+        </li>
+      </ul>
+      <div className="sidebar-footer">
+        <Link className="sidebar-link" onClick={handlelogout}>
+          <LogoutIcon className="icon" />
+          <span>Logout</span>
+        </Link>
+      </div>
+    </div>
+  );
+};
 
-export default Sidebar
+export default Sidebar;

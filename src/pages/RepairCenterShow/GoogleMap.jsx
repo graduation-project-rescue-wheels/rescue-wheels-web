@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
+import React from "react";
+import PropTypes from "prop-types";
+import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 
 class GoogleMap extends React.Component {
   static propTypes = {
@@ -21,12 +21,18 @@ class GoogleMap extends React.Component {
   };
 
   render() {
-    const { google, initialCenter, markerPosition, markerTitle, markerName, markerIcon, markerLabel, markerAnimation } = this.props;
+    const {
+      google,
+      initialCenter,
+      markerPosition,
+      markerTitle,
+      markerName,
+      markerIcon,
+      markerLabel,
+      markerAnimation,
+      mapStyles,
+    } = this.props;
 
-    const mapStyles = { 
-      width: '100%',
-      height: '400px'
-    };
 
     return (
       <Map
@@ -35,6 +41,7 @@ class GoogleMap extends React.Component {
         style={mapStyles}
         initialCenter={initialCenter}
         loadingElement={<div>Loading...</div>} // Show loading indicator
+        fullscreenControl={false}
       >
         <Marker
           title={markerTitle}
@@ -42,7 +49,7 @@ class GoogleMap extends React.Component {
           position={markerPosition}
           icon={markerIcon}
           label={markerLabel}
-          animation={markerAnimation}
+          // animation={markerAnimation}
         />
       </Map>
     );
@@ -51,6 +58,5 @@ class GoogleMap extends React.Component {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyB4BFqNlmu7N27rHdSydssJiyHvpvgzSc8' // Replace with your Google Maps API key
+  apiKey: "AIzaSyB4BFqNlmu7N27rHdSydssJiyHvpvgzSc8", // Replace with your Google Maps API key
 })(GoogleMap);
-

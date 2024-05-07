@@ -1,9 +1,9 @@
-@media (max-width: 991px) {
-    .tables {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    .table {
-        width: 100% !important;
-    }
+@media (max-width: 1200px) {
+  .tables {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .table {
+    width: 100% !important;
+  }
 }

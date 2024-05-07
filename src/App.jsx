@@ -10,52 +10,56 @@ import Settings from './pages/Settings/Settings';
 import Vehicles from './pages/Vehicles/Vehicles';
 import VerifyEmail from './pages/VerifyEmail/VerifyEmail'
 import Layout from './components/Layout/Layout'
+import AdminLayout from "./components/AdminLayout/AdminLayout";
 import RepairCenterShow from './pages/RepairCenterShow/RepairCenterShow'
 import Dashboard from './pages/Admin/Dashboard/Dashboard'
 import Auth from './pages/Admin/Auth/Auth'
 import RepairCenters from './pages/Admin/RepairCenters/RepairCenters'
-// import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
 import Requests from './pages/Admin/Requests/Requests'
-import AdminSettings from './pages/Admin/AdminSettings/AdminSettings'
+import RepairCenterProfile from "./pages/Admin/RepairCenterProfile/RepairCenterProfile";
 import Emergency from './pages/Emergency/Emergency'
 import Technician from './pages/Technician/Technician'
 
-
 function App() {
-
   let router = createBrowserRouter([
     // { path: '/', element: <Login /> },
-    { path: '/login', element: <Login /> },
-    { path: '/Register', element: <Register /> },
+    { path: "/login", element: <Login /> },
+    { path: "/Register", element: <Register /> },
     {
-      path: '/', element: <Layout />, children: [
-        { path: '/HomePage', element: <HomePage /> },
-        { path: '/Settings', element: <Settings /> },
-        { path: '/Vehicles', element: <Vehicles /> },
-        { path: '/VerifyEmail/:userToken', element: <VerifyEmail /> },
+      path: "/",
+      element: <Layout />,
+      children: [
+        { path: "/HomePage", element: <HomePage /> },
+        { path: "/Settings", element: <Settings /> },
+        { path: "/Vehicles", element: <Vehicles /> },
+        { path: "/VerifyEmail/:userToken", element: <VerifyEmail /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
         { path: "Emergency", element: <Emergency /> },
         { path: "Technician", element: <Technician /> },
       ]
     },
-    { path: '/Dashboard', element: <Dashboard /> },
-    { path: '/Auth', element: <Auth /> },
-    { path: '/RepairCenters', element: <RepairCenters /> },
-    { path: '/Requests', element: <Requests /> },
-    { path: '/AdminSettings', element: <AdminSettings /> },
-  ])
+    {
+      path: "/Admin",
+      element: <AdminLayout />,
+      children: [
+        { path: "/Admin/Dashboard", element: <Dashboard /> },
+        { path: "/Admin/Auth", element: <Auth /> },
+        { path: "/Admin/RepairCenters", element: <RepairCenters /> },
+        { path: "/Admin/Requests", element: <Requests /> },
+        { path: "/Admin/RepairCenter/:id", element: <RepairCenterProfile /> },
+      ],
+    },
+  ]);
 
   return (
     <>
       <Provider store={ConfigStore}>
-        <PersistGate loading={null} persistor={persistor} >
+        <PersistGate loading={null} persistor={persistor}>
           <RouterProvider router={router} />
         </PersistGate>
       </Provider>
-
-
     </>
-  )
+  );
 }
 
-export default App
+export default App;

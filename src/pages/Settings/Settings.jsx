@@ -85,8 +85,8 @@ const Settings = () => {
                 position="top-center"
                 reverseOrder={false}
             />
-            <Navbar />
-            <div className="d-flex flex-column align-items-center" style={{ marginTop: "100px" }}>
+            {/* <Navbar /> */}
+            <div className="d-flex flex-column align-items-center" style={{ marginTop: "20px" }}>
                 <h2>Settings</h2>
                 <nav className="w-75">
                     <div className="nav nav-tabs" id="nav-tab" role="tablist">
@@ -116,7 +116,7 @@ const Settings = () => {
                         </button>
                     </div>
                 </nav>
-                <div className="tab-content w-75 shadow-lg" id="nav-tabContent">
+                <div className="tab-content w-75 shadow-lg bg-white" id="nav-tabContent">
                     <div className="tab-pane fade show active" id="nav-personal-information" role="tabpanel" aria-labelledby="nav-personal-information-tab" tabIndex="0">
                         <div className="card mb-3" style={{ border: "none" }}>
                             <div className="row g-0">

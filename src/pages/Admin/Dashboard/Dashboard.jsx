@@ -1,133 +1,197 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from './../../../components/Sidebar/Sidebar';
-import AdminNav from '../../../components/AdminNav/AdminNav';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import "./Dashboard.css"
-import AdminCard from './../../../components/AdminCard/AdminCard';
-
+import AdminNav from "../../../components/AdminNav/AdminNav";
+import img from "../../../assets/143086968_2856368904622192_1959732218791162458_n.png";
+import "./Dashboard.css";
+import AdminCard from "./../../../components/AdminCard/AdminCard";
+import { useDispatch } from "react-redux";
+import { GetAllUsers } from "../../../store/AuthSlice";
+import { useEffect, useState } from "react";
+import { GetAllRepairCenters } from "../../../store/RepairCenterSlice";
+import { getAllRequests } from "../../../store/EmergencyRequestSlice";
+import GoogleMap from "../../RepairCenterShow/GoogleMap";
+import SimpleTable from "../../../components/SimpleTable/SimpleTable";
+import Loading from "../../../components/Loading/Loading";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const [auth, setAuths] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [repairCenters, setRepairCenters] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [isFetched, setIsFetched] = useState(false);
+  const mapStyle = {
+    position: "relative",
+    width: "70%",
+    height: "90%",
+    marginTop: "5px",
+  };
 
-    function createData(
-        user,
-        requested,
-        type,
-        date,
-        rate,
-        location,
-    ) {
-        return { user, requested, type, date, rate, location };
-    }
+  const getUser = (user) => {
+    let value = "none";
+    users.forEach((e) => {
+      if (e._id === user) {
+        value = `${e.firstName} ${e.lastName}`;
+      }
+    });
+    return value;
+  };
 
-    const rows = [
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-        createData('-', "-", "-", "-", "-", "-"),
-    ];
+  const requestColumns = [
+    {
+      field: "requestedBy",
+      headerName: "Requested By",
+      width: 130,
+      valueGetter: (value, row) => getUser(row.requestedBy),
+    },
+    {
+      field: "responder",
+      headerName: "Responder",
+      width: 120,
+      valueGetter: (value, row) => getUser(row.responder),
+    },
+    { field: "type", headerName: "Type", width: 180 },
+    { field: "state", headerName: "State", width: 100 },
+    {
+      field: "pickupLocation",
+      headerName: "Pickup Location",
+      width: 230,
+      renderCell: (params) => (
+        <GoogleMap
+          initialCenter={{
+            lat: params.row.coordinates.latitude,
+            lng: params.row.coordinates.longitude,
+          }}
+          markerPosition={{
+            lat: params.row.coordinates.latitude,
+            lng: params.row.coordinates.longitude,
+          }}
+          mapStyles={mapStyle}
+        />
+      ),
+    },
+    {
+      field: "location",
+      headerName: "Dropoff Location",
+      width: 230,
+      renderCell: (params) =>
+        params.dropOffLocation ? (
+          <GoogleMap
+            initialCenter={{
+              lat: params.row.dropOffLocation.latitude,
+              lng: params.row.dropOffLocation.longitude,
+            }}
+            markerPosition={{
+              lat: params.row.dropOffLocation.latitude,
+              lng: params.row.dropOffLocation.longitude,
+            }}
+            mapStyles={mapStyle}
+          />
+        ) : (
+          <div>null</div>
+        ),
+    },
+  ];
 
-    return (
-        <div className="d-flex">
-            <Sidebar />
-            <div className="d-flex flex-column row-gap-1 hero" style={{ marginLeft: "70px", width: "calc(100% - 70px)" }}>
-                <AdminNav name="Dashboard" />
-                <div className="cards d-flex align-items-center justify-content-between column-gap-2 px-3 flex-wrap">
-                    <AdminCard
-                        name="Total Users"
-                        total={220}
-                    />
+  const userColumns = [
+    {
+      field: "pic",
+      headerName: "Pic",
+      width: 70,
+      renderCell: (params) =>
+        params.pic ? (
+          <img
+            src={params.pic}
+            alt=""
+            className="rounded-circle pic"
+            style={{ width: "2.5rem" }}
+          />
+        ) : (
+          <img
+            src={img}
+            alt=""
+            className="rounded-circle pic"
+            style={{ width: "2.5rem" }}
+          />
+        ),
+    },
+    {
+      field: "fullName",
+      headerName: "Full name",
+      width: 150,
+      valueGetter: (value, row) =>
+        `${row.firstName || ""} ${row.lastName || ""}`,
+    },
+    { field: "role", headerName: "Role", width: 100 },
+  ];
 
-                    <AdminCard
-                        name="Total Technicians"
-                        total={220}
-                    />
+  const getAllEmergencyRequests = async () => {
+    const res = await dispatch(getAllRequests());
+    setRequests(res.payload.data);
+    setIsFetched(true);
+  };
 
-                    <AdminCard
-                        name="Total Repair Centers"
-                        total={220}
-                    />
+  const getAllRepairCenters = async () => {
+    const res = await dispatch(GetAllRepairCenters());
+    setRepairCenters(res.payload.data);
+  };
 
-                    <AdminCard
-                        name="Total Requests"
-                        total={220}
-                    />
-                </div>
-                <div className="tables px-3 d-flex justify-content-between">
-                    <div className="table p-3" style={{ backgroundColor: "white", borderRadius: "15px", width: "69%", boxShadow: "#ccc 0px 0px 10px 0.5px" }}>
-                        <h2 style={{ color: '#e48700' }}>Recent Requests</h2>
-                        <TableContainer component={Paper}>
-                            <Table sx={{ overflowY: "scroll" }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell style={{ fontWeight: "bold" }}>User</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>Requested</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>Type</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>Date</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>Rate</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>Location</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <TableRow
-                                            key={row.user}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {row.user}
-                                            </TableCell>
-                                            <TableCell align="center">{row.requested}</TableCell>
-                                            <TableCell align="center">{row.type}</TableCell>
-                                            <TableCell align="center">{row.date}</TableCell>
-                                            <TableCell align="center">{row.rate}</TableCell>
-                                            <TableCell align="center">{row.location}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </div>
-                    <div className="table p-3" style={{ backgroundColor: "white", borderRadius: "15px", width: "29%", boxShadow: "#ccc 0px 0px 10px 0.5px" }}>
-                        <h2 style={{ color: '#e48700' }}>Recent Users</h2>
-                        <TableContainer component={Paper}>
-                            <Table sx={{ overflowY: "scroll" }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell style={{ fontWeight: "bold" }}>Pic</TableCell>
-                                        <TableCell align="center" style={{ fontWeight: "bold" }}>User</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <TableRow
-                                            key={row.user}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {row.user}
-                                            </TableCell>
-                                            <TableCell align="center">{row.requested}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
+  const fetchAllUsers = async () => {
+    const res = await dispatch(GetAllUsers());
+    const auths = res.payload.data;
+    setUsers(auths.filter((auth) => auth.role === "User"));
+    setTechnicians(auths.filter((auth) => auth.role === "Technician"));
+    setAuths(
+      auths.filter(
+        (auth) => auth.role !== "Admin" && auth.role !== "SuperAdmin"
+      )
+    );
+  };
 
-export default Dashboard
+  useEffect(() => {
+    fetchAllUsers();
+    getAllRepairCenters();
+    getAllEmergencyRequests();
+  }, []);
+
+  return (
+    <>
+      <AdminNav name="Dashboard" />
+      {isFetched ? (
+        <>
+          <div className="cards d-flex align-items-center justify-content-between column-gap-2 px-3 flex-wrap">
+            <AdminCard name="Total Users" total={users.length} />
+
+            <AdminCard name="Total Technicians" total={technicians.length} />
+
+            <AdminCard
+              name="Total Repair Centers"
+              total={repairCenters.length}
+            />
+
+            <AdminCard name="Total Requests" total={requests.length} />
+          </div>
+
+          <div className="tables px-3 d-flex justify-content-between">
+            <SimpleTable
+              title={"Recent Requests"}
+              rows={requests}
+              columns={requestColumns}
+              styles={{ width: "69%" }}
+            />
+
+            <SimpleTable
+              title={"Recent Auths"}
+              rows={auth}
+              columns={userColumns}
+              styles={{ width: "29%" }}
+            />
+          </div>
+        </>
+      ) : (
+        <Loading />
+      )}
+    </>
+  );
+};
+
+export default Dashboard;
