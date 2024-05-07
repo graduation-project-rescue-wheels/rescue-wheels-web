@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { GetAllUsers } from "../../../store/AuthSlice";
 import { useEffect, useState } from "react";
 import { GetAllRepairCenters } from "../../../store/RepairCenterSlice";
-import { getAllRequests } from "../../../store/EmergencyRequests";
+import { getAllRequests } from "../../../store/EmergencyRequestSlice";
 import GoogleMap from "../../RepairCenterShow/GoogleMap";
 import SimpleTable from "../../../components/SimpleTable/SimpleTable";
 import Loading from "../../../components/Loading/Loading";

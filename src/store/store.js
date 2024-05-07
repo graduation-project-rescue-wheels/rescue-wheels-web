@@ -12,7 +12,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import RepairCenterSlice from "./RepairCenterSlice";
-import EmergencyRequests from "./EmergencyRequests";
+import MapSlice from "./MapSlice";
+import EmergencyRequestSlice from "./EmergencyRequestSlice";
 
 const persistConfig = {
   key: "root",
@@ -23,7 +24,8 @@ const persistConfig = {
 const reducer = combineReducers({
   AuthData: AuthSlice,
   RepairCenterData: RepairCenterSlice,
-  EmergencyRequest: EmergencyRequests,
+  MapController: MapSlice,
+  EmergencyRequests: EmergencyRequestSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

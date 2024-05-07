@@ -49,8 +49,8 @@ const Vehicles = () => {
                 position="top-center"
                 reverseOrder={false}
             />
-            <Navbar />
-            <h2 className="text-center" style={{ marginTop: "100px" }}>My Vehicles</h2>
+            {/* <Navbar /> */}
+            <h2 className="text-center" style={{ marginTop: "20px" }}>My Vehicles</h2>
             <div className="card w-75 mb-3  border-0 ms-auto shadow-lg me-auto mt-3">
                 <div className="card-body position-relative d-flex flex-column align-items-center" style={{ height: "75vh" }}>
                     <div className="cards w-100 d-flex flex-column mt-3 align-items-center overflow-y-scroll" style={{ height: "80%" }}>

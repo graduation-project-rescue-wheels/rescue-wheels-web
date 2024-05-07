@@ -9,7 +9,7 @@ export default function Layout() {
     <Navbar/>
     {/*  */}
    
-    <div style={{marginTop:'79px'}}>
+    <div>
     <Outlet/>
     </div>
     </div>

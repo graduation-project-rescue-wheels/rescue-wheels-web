@@ -1,22 +1,24 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import "./App.css";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import { ConfigStore, persistor } from "./store/store";
-import { Provider } from "react-redux";
-import HomePage from "./pages/HomePage/HomePage";
-import { PersistGate } from "redux-persist/integration/react";
-import Settings from "./pages/Settings/Settings";
-import Vehicles from "./pages/Vehicles/Vehicles";
-import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
-import Layout from "./components/Layout/Layout";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import './App.css'
+import Login from './pages/Login/Login'
+import Register from './pages/Register/Register'
+import { ConfigStore, persistor } from './store/store'
+import { Provider } from 'react-redux'
+import HomePage from './pages/HomePage/HomePage'
+import { PersistGate } from "redux-persist/integration/react"
+import Settings from './pages/Settings/Settings';
+import Vehicles from './pages/Vehicles/Vehicles';
+import VerifyEmail from './pages/VerifyEmail/VerifyEmail'
+import Layout from './components/Layout/Layout'
 import AdminLayout from "./components/AdminLayout/AdminLayout";
-import RepairCenterShow from "./pages/RepairCenterShow/RepairCenterShow";
-import Dashboard from "./pages/Admin/Dashboard/Dashboard";
-import Auth from "./pages/Admin/Auth/Auth";
-import RepairCenters from "./pages/Admin/RepairCenters/RepairCenters";
-import Requests from "./pages/Admin/Requests/Requests";
+import RepairCenterShow from './pages/RepairCenterShow/RepairCenterShow'
+import Dashboard from './pages/Admin/Dashboard/Dashboard'
+import Auth from './pages/Admin/Auth/Auth'
+import RepairCenters from './pages/Admin/RepairCenters/RepairCenters'
+import Requests from './pages/Admin/Requests/Requests'
 import RepairCenterProfile from "./pages/Admin/RepairCenterProfile/RepairCenterProfile";
+import Emergency from './pages/Emergency/Emergency'
+import Technician from './pages/Technician/Technician'
 
 function App() {
   let router = createBrowserRouter([
@@ -32,7 +34,9 @@ function App() {
         { path: "/Vehicles", element: <Vehicles /> },
         { path: "/VerifyEmail/:userToken", element: <VerifyEmail /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
-      ],
+        { path: "Emergency", element: <Emergency /> },
+        { path: "Technician", element: <Technician /> },
+      ]
     },
     {
       path: "/Admin",

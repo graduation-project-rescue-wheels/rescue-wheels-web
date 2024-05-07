@@ -5,14 +5,14 @@ import { useState } from "react";
 import {
   cancelRequest,
   getAllRequests,
-} from "../../../store/EmergencyRequests";
+} from "../../../store/EmergencyRequestSlice";
 import GoogleMap from "../../RepairCenterShow/GoogleMap";
 import { Toaster } from "react-hot-toast";
 
 const Requests = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState(
-    useSelector((state) => state.EmergencyRequest.AllEmergencyRequests)
+    useSelector((state) => state.EmergencyRequests.AllEmergencyRequests)
   );
   const users = useSelector((state) => state.AuthData.AllUsers);
   const mapStyle = {
