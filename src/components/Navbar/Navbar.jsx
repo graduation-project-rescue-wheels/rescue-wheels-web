@@ -28,11 +28,11 @@ const Navbar = () => {
     <div className="collapse navbar-collapse " id="navbarSupportedContent">
     <ul className="navbar-nav mx-auto mb-2   mb-lg-0 ">
         <li className="nav-item">
-          <NavLink className="nav-link " aria-current="page" to="/HomePage">Home</NavLink>
+          <NavLink className="nav-link " aria-current="page" to="/HomePage">Repair Centers</NavLink>
         </li>
         
         <li className="nav-item">
-          <NavLink className="nav-link" to="/">History</NavLink>
+          <NavLink className="nav-link" to="/History">History</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/Emergency">Emergency</NavLink>
@@ -42,9 +42,6 @@ const Navbar = () => {
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/Settings">Settings</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/">Profile</NavLink>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link" to="/Technician">Technician</NavLink>

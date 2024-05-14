@@ -26,7 +26,7 @@ export const AddRepairCenter = createAsyncThunk(
     } catch (error) {
 
       if (error.response.status === 400) {
-        showErrorToast(error.response.data.errorMessage);
+        showErrorToast(error.response.data.message);
       } else {
         showErrorToast(error.response.data.errMsg);
       }

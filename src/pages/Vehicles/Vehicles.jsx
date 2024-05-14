@@ -60,7 +60,7 @@ const Vehicles = () => {
                                 <p className="card-text" style={{ justifySelf: "center" }}>There are no registered vehicles</p>
                                 :
                                 user.vehicles_IDS.map((id) => {
-                                    return <VehicleItem key={id._id} id={id} />
+                                    return <VehicleItem key={id} id={id} />
                                 })
                         }
                     </div>

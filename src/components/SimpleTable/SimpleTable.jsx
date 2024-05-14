@@ -10,8 +10,8 @@ const SimpleTable = ({ title, rows, columns, styles }) => {
       <DataGrid
         style={{ border: "none" }}
         autoHeight
-        rowHeight={90}
-        rows={rows.slice(-3).reverse()}
+        rowHeight={78}
+        rows={rows}
         getRowId={(row) => row._id}
         className="bg-white"
         columns={columns}

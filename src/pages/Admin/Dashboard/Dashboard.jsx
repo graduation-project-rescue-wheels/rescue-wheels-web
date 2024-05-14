@@ -2,7 +2,7 @@ import AdminNav from "../../../components/AdminNav/AdminNav";
 import img from "../../../assets/143086968_2856368904622192_1959732218791162458_n.png";
 import "./Dashboard.css";
 import AdminCard from "./../../../components/AdminCard/AdminCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GetAllUsers } from "../../../store/AuthSlice";
 import { useEffect, useState } from "react";
 import { GetAllRepairCenters } from "../../../store/RepairCenterSlice";
@@ -25,10 +25,11 @@ const Dashboard = () => {
     height: "90%",
     marginTop: "5px",
   };
-
+  let allusers = useSelector((state) => state.AuthData.AllUsers);
   const getUser = (user) => {
     let value = "none";
-    users.forEach((e) => {
+
+    allusers.forEach((e) => {
       if (e._id === user) {
         value = `${e.firstName} ${e.lastName}`;
       }
@@ -54,40 +55,44 @@ const Dashboard = () => {
     {
       field: "pickupLocation",
       headerName: "Pickup Location",
-      width: 230,
+      width: 220,
       renderCell: (params) => (
-        <GoogleMap
-         dispatch={dispatch}
-          initialCenter={{
-            lat: params.row.coordinates.latitude,
-            lng: params.row.coordinates.longitude,
-          }}
-          markerPosition={{
-            lat: params.row.coordinates.latitude,
-            lng: params.row.coordinates.longitude,
-          }}
-          mapStyles={mapStyle}
-        />
+        <div style={mapStyle}>
+          <GoogleMap
+            dispatch={dispatch}
+            initialCenter={{
+              lat: params.row.coordinates.latitude,
+              lng: params.row.coordinates.longitude,
+            }}
+            markerPosition={{
+              lat: params.row.coordinates.latitude,
+              lng: params.row.coordinates.longitude,
+            }}
+          />
+        </div>
       ),
     },
     {
       field: "location",
       headerName: "Dropoff Location",
-      width: 230,
+      width: 220,
       renderCell: (params) =>
-        params.dropOffLocation ? (
-          <GoogleMap 
-          dispatch={dispatch}
-            initialCenter={{
-              lat: params.row.dropOffLocation.latitude,
-              lng: params.row.dropOffLocation.longitude,
-            }}
-            markerPosition={{
-              lat: params.row.dropOffLocation.latitude,
-              lng: params.row.dropOffLocation.longitude,
-            }}
-            mapStyles={mapStyle}
-          />
+        params.row.dropOffLocation !== null &&
+        params.row.dropOffLocation.latitude !== null ? (
+          <div style={mapStyle}>
+            <GoogleMap
+              dispatch={dispatch}
+              initialCenter={{
+                lat: params.row.dropOffLocation.latitude,
+                lng: params.row.dropOffLocation.longitude,
+              }}
+              markerPosition={{
+                lat: params.row.dropOffLocation.latitude,
+                lng: params.row.dropOffLocation.longitude,
+              }}
+              mapStyles={mapStyle}
+            />
+          </div>
         ) : (
           <div>null</div>
         ),
@@ -99,22 +104,14 @@ const Dashboard = () => {
       field: "pic",
       headerName: "Pic",
       width: 70,
-      renderCell: (params) =>
-        params.pic ? (
-          <img
-            src={params.pic}
-            alt=""
-            className="rounded-circle pic"
-            style={{ width: "2.5rem" }}
-          />
-        ) : (
-          <img
-            src={img}
-            alt=""
-            className="rounded-circle pic"
-            style={{ width: "2.5rem" }}
-          />
-        ),
+      renderCell: (params) => (
+        <img
+          src={params.row.profilePic ? params.row.profilePic : img}
+          alt=""
+          className="rounded-circle pic"
+          style={{ width: "2.5rem", aspectRatio: "1 / 1" }}
+        />
+      ),
     },
     {
       field: "fullName",
@@ -176,14 +173,14 @@ const Dashboard = () => {
           <div className="tables px-3 d-flex justify-content-between">
             <SimpleTable
               title={"Recent Requests"}
-              rows={requests}
+              rows={requests.slice(0, 3)}
               columns={requestColumns}
               styles={{ width: "69%" }}
             />
 
             <SimpleTable
               title={"Recent Auths"}
-              rows={auth}
+              rows={auth.slice(-3).reverse()}
               columns={userColumns}
               styles={{ width: "29%" }}
             />

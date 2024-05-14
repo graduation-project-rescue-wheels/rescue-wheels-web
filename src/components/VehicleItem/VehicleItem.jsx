@@ -27,7 +27,7 @@ const VehicleItem = ({ id }) => {
         fetchVehicleData();
     }, [])
     return (
-        <div className="card">
+        <div className="card" style={{ backgroundColor: "#efefef" }}>
             <div className="card-body">
                 <div className="icons d-flex justify-content-between">
                     {

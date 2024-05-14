@@ -1,20 +1,19 @@
-import AdminNav from "../../../components/AdminNav/AdminNav";
-import TableComponent from "../../../components/TableComponent/TableComponent";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import {
-  cancelRequest,
-  getAllRequests,
-} from "../../../store/EmergencyRequestSlice";
-import GoogleMap from "../../RepairCenterShow/GoogleMap";
-import { Toaster } from "react-hot-toast";
+import { GetRequestById } from "../../store/EmergencyRequestSlice";
+import Loading from "../../components/Loading/Loading";
+import SimpleTable from "../../components/SimpleTable/SimpleTable";
+import GoogleMap from "../RepairCenterShow/GoogleMap";
+import { getUserData } from "../../store/AuthSlice";
 
-const Requests = () => {
+const History = () => {
   const dispatch = useDispatch();
-  const [rows, setRows] = useState(
-    useSelector((state) => state.EmergencyRequests.AllEmergencyRequests)
-  );
+  const [isFetched, setIsFetched] = useState(false);
+  const [requests, setRequests] = useState([]);
+  const [signedUserRequests, setSignedUserRequests] = useState([]);
   const users = useSelector((state) => state.AuthData.AllUsers);
+  console.log(users);
+
   const mapStyle = {
     position: "relative",
     width: "70%",
@@ -23,28 +22,12 @@ const Requests = () => {
     borderRadius: "5%",
   };
 
-  const getUser = (user) => {
-    let value = "none";
-    users.forEach((e) => {
-      if (e._id === user) {
-        value = `${e.firstName} ${e.lastName}`;
-      }
-    });
-    return value;
-  };
-
   const columns = [
-    {
-      field: "requestedBy",
-      headerName: "Requested By",
-      width: 150,
-      valueGetter: (value, row) => getUser(row.requestedBy),
-    },
     {
       field: "responder",
       headerName: "Responder",
       width: 150,
-      valueGetter: (value, row) => getUser(row.responder),
+      valueGetter: (value, row) => row.responder ? `${row.responder.firstName} ${row.responder.lastName}` : "none",
     },
     { field: "type", headerName: "Type", width: 200 },
     { field: "state", headerName: "State", width: 150 },
@@ -97,34 +80,43 @@ const Requests = () => {
     { field: "createdAt", headerName: "Created At", width: 200 },
   ];
 
-  const getAllEmergencyRequests = async () => {
-    const res = await dispatch(getAllRequests());
-    setRows(res.payload.data);
-    console.log(res.payload.status);
-  };
-
-  async function handleEmergencyRequestCancel(selected) {
-    selected.forEach(async (e) => {
-      const res = await dispatch(cancelRequest({ id: e }));
-      if (!res.payload.status) {
-        getAllEmergencyRequests();
-      }
-    });
+  const fetchUserData = async () =>{
+    const res = await dispatch(getUserData());
+    console.log(res.payload.data.Requests_IDS);
+    setSignedUserRequests(res.payload.data.Requests_IDS);
   }
 
+  const fetchRequests = async () => {
+    setRequests([])
+    const resUser = await dispatch(getUserData());
+    await resUser.payload.data.Requests_IDS.forEach(async (id) => {
+      const res = await dispatch(GetRequestById(id));
+      setRequests((requests) => [...requests, res.payload.request]);
+    });
+    setIsFetched(true);
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
-      <AdminNav name="Requests" />
-      <TableComponent
-        rows={rows}
-        columns={columns}
-        rowHeight={90}
-        type={"requests"}
-        func={handleEmergencyRequestCancel}
-      />
+      {isFetched ? (
+        <div className="mx-3 mt-3">
+          <SimpleTable
+            rows={requests}
+            columns={columns}
+            title={"Requests History"}
+            styles={{ borderRadius: "0" }}
+          />
+        </div>
+      ) : (
+        <div className="mt-5">
+          <Loading />
+        </div>
+      )}
     </>
   );
 };
 
-export default Requests;
+export default History;
