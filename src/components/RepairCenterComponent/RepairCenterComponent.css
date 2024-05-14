@@ -9,6 +9,6 @@
     transition: 0.3s;
 }
 .componenthover:hover{
-    box-shadow: 0 8px 16px 0 #e48700;
-    border: #e48700 2px solid;
+    box-shadow: 0 8px 16px 0 var(--secondry-color);
+    border: var(--secondry-color) 2px solid;
 }
