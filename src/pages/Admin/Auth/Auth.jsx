@@ -12,22 +12,14 @@ const columns = [
     field: "pic",
     headerName: "Pic",
     width: 70,
-    renderCell: (params) =>
-      params.pic ? (
-        <img
-          src={params.pic}
-          alt=""
-          className="rounded-circle pic"
-          style={{ width: "2rem" }}
-        />
-      ) : (
-        <img
-          src={img}
-          alt=""
-          className="rounded-circle pic"
-          style={{ width: "2rem" }}
-        />
-      ),
+    renderCell: (params) => (
+      <img
+        src={params.row.profilePic ? params.row.profilePic : img}
+        alt=""
+        className="rounded-circle pic"
+        style={{ width: "2rem", aspectRatio: "1 / 1" }}
+      />
+    ),
   },
   {
     field: "fullName",

@@ -2,7 +2,6 @@ import React from 'react'
 import img from "../../assets/143086968_2856368904622192_1959732218791162458_n.png"
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import "./AdminNav.css"
 
@@ -24,12 +23,7 @@ const AdminNav = ({name}) => {
                     <NotificationsIcon type="button" />
                         <div className="d-flex align-items-center gap-3">
                             <h6 className='mb-0'>{userName}</h6>
-                            {
-                                user.pic ? 
-                                <img src={user.pic} alt="" className="rounded-circle pic" style={{ width: "3rem" }} />
-                                :
-                                <img src={img} alt="" className="rounded-circle pic" style={{ width: "3rem" }} />
-                            }
+                            <img src={user.profilePic ? user.profilePic : img} alt="" className="rounded-circle pic" style={{ width: "3rem", aspectRatio: "1 / 1" }} />
                         </div>
                     </div>
                 </div>

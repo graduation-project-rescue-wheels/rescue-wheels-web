@@ -95,10 +95,10 @@ const RepairCenterProfile = () => {
           <div className="d-flex w-100 align-items-center flex-column gap-3">
             <div className="d-flex gap-5 w-75 my-5 flex-wrap justify-content-center">
               <img
-                src={img}
+                src={repairData.Image ? repairData.Image.secure_url : img}
                 alt=""
                 className="rounded-circle"
-                style={{ minHeight: "100px" }}
+                style={{ width: "12rem" }}
               />
               <div className="d-flex flex-column justify-content-center fs-5 gap-3 flex-grow-1">
                 <div className="d-flex align-items-center gap-2">
