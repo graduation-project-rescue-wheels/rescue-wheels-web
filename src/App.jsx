@@ -19,6 +19,8 @@ import Requests from './pages/Admin/Requests/Requests'
 import RepairCenterProfile from "./pages/Admin/RepairCenterProfile/RepairCenterProfile";
 import Emergency from './pages/Emergency/Emergency'
 import Technician from './pages/Technician/Technician'
+import History from './pages/History/History'
+import LandingPage from './pages/LandingPage/LandingPage'
 
 function App() {
   let router = createBrowserRouter([
@@ -29,6 +31,7 @@ function App() {
       path: "/",
       element: <Layout />,
       children: [
+        { path: "/", element: <LandingPage /> },
         { path: "/HomePage", element: <HomePage /> },
         { path: "/Settings", element: <Settings /> },
         { path: "/Vehicles", element: <Vehicles /> },
@@ -36,6 +39,7 @@ function App() {
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
         { path: "Emergency", element: <Emergency /> },
         { path: "Technician", element: <Technician /> },
+        { path: "History", element: <History /> },
       ]
     },
     {
