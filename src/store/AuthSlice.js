@@ -261,10 +261,10 @@ let AuthSlice = createSlice({
 
     // ^ UpdateUser
     builder.addCase(UpdateUser.fulfilled, (state, action) => {
-      if (action.payload.isValid) {
-        state.UserData = action.payload.data;
+      // if (action.payload.isValid) {
+        state.UserData = action.payload.updatedUser;
         console.log(action.payload);
-      }
+      // }
     });
 
     // ^ UpdatePassword
