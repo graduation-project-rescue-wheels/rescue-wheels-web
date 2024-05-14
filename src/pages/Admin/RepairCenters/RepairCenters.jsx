@@ -2,9 +2,10 @@ import AdminNav from "../../../components/AdminNav/AdminNav";
 import * as YUP from "yup";
 import { useFormik } from "formik";
 import Input from "../../../components/Input";
+import img from "../../../assets/143086968_2856368904622192_1959732218791162458_n.png";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GooglePlacesAutocomplete, {
   getLatLng,
   geocodeByAddress,
@@ -17,6 +18,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import TableComponent from "../../../components/TableComponent/TableComponent";
+import "./RepairCenter.css";
 
 const columns = [
   { field: "name", headerName: "RC Name", width: 250 },
@@ -39,18 +41,25 @@ const RepairCenters = () => {
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
   const [coords, setCoords] = useState({});
+  const [image, setImage] = useState();
   const [rows, setRows] = useState(
     useSelector((state) => state.RepairCenterData.AllRepaircentersData.data)
   );
-  console.log(rows);
-
+  const formData = new FormData();
   const getAllRepairCenters = async () => {
     const res = await dispatch(GetAllRepairCenters());
     setRows(res.payload.data);
   };
+  const inputRef = useRef();
 
   async function handleFormSubmitRegister() {
-    await dispatch(AddRepairCenter({ ...RegisterForm.values, coords }));
+    formData.append("image", image);
+    formData.append("coords", JSON.stringify(coords));
+    for (var key in RegisterForm.values) {
+      console.log(key + "  " + RegisterForm.values[key]);
+      formData.append(key, RegisterForm.values[key]);
+    }
+    await dispatch(AddRepairCenter(formData));
     getAllRepairCenters();
     RegisterForm.resetForm();
     setAddress("");
@@ -111,6 +120,10 @@ const RepairCenters = () => {
       );
   };
 
+  function handleInputSubmit() {
+    inputRef.current.click();
+  }
+
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
@@ -152,89 +165,109 @@ const RepairCenters = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <form className="w-75">
-                <Input
-                  text={"Name"}
-                  name="name"
-                  id="name"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.name}
-                  formT={RegisterForm.touched.name}
-                  formE={RegisterForm.errors.name}
-                />
-
-                <div className="mb-3">
-                  <label
-                    htmlFor="location"
-                    className="form-label text-capitalize"
-                  >
-                    Location
-                  </label>
-
-                  <GooglePlacesAutocomplete
-                    className="form-control"
-                    apiKey="AIzaSyB4BFqNlmu7N27rHdSydssJiyHvpvgzSc8"
-                    selectProps={{
-                      address,
-                      onChange: setAddress,
-                    }}
+              <form className="form w-100 d-flex justify-content-evenly">
+                <div
+                  className="image rounded-circle h-25"
+                  style={{ position: "relative", width: "35%" }}
+                  onClick={handleInputSubmit}
+                >
+                  <img
+                    src={image ? URL.createObjectURL(image) : img}
+                    alt=""
+                    className="rounded-circle pic w-100"
+                    style={{ aspectRatio: "1 / 1" }}
                   />
-                  {/* <div className="alert alert-danger mt-2">error</div> */}
+                  <input
+                    type="file"
+                    className="btn mt-2"
+                    ref={inputRef}
+                    onChange={(e) => setImage(e.target.files[0])}
+                    style={{ display: "none", aspectRatio: "1 / 1" }}
+                  />
                 </div>
 
-                <Input
-                  text={"Description"}
-                  type="description"
-                  name="description"
-                  id="description"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.description}
-                  formT={RegisterForm.touched.description}
-                  formE={RegisterForm.errors.description}
-                />
-                <Input
-                  text={"Number Of Employees"}
-                  name="numberOfEmployees"
-                  id="numberOfEmployees"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.numberOfEmployees}
-                  formT={RegisterForm.touched.numberOfEmployees}
-                  formE={RegisterForm.errors.numberOfEmployees}
-                />
-                <Input
-                  text={"Email"}
-                  name="email"
-                  id="email"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.email}
-                  formT={RegisterForm.touched.email}
-                  formE={RegisterForm.errors.email}
-                />
-                <Input
-                  text={"Mobile Number"}
-                  name="phoneNumber"
-                  id="phoneNumber"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.phoneNumber}
-                  formT={RegisterForm.touched.phoneNumber}
-                  formE={RegisterForm.errors.phoneNumber}
-                />
-                <Input
-                  text={"Password"}
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.password}
-                  formT={RegisterForm.touched.password}
-                  formE={RegisterForm.errors.password}
-                />
+                <div style={{ width: "60%" }}>
+                  <Input
+                    text={"Name"}
+                    name="name"
+                    id="name"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.name}
+                    formT={RegisterForm.touched.name}
+                    formE={RegisterForm.errors.name}
+                  />
+                  <div className="mb-3">
+                    <label
+                      htmlFor="location"
+                      className="form-label text-capitalize"
+                    >
+                      Location
+                    </label>
+
+                    <GooglePlacesAutocomplete
+                      className="form-control"
+                      apiKey="AIzaSyB4BFqNlmu7N27rHdSydssJiyHvpvgzSc8"
+                      selectProps={{
+                        address,
+                        onChange: setAddress,
+                      }}
+                    />
+                    {/* <div className="alert alert-danger mt-2">error</div> */}
+                  </div>
+                  <Input
+                    text={"Description"}
+                    type="description"
+                    name="description"
+                    id="description"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.description}
+                    formT={RegisterForm.touched.description}
+                    formE={RegisterForm.errors.description}
+                  />
+                  <Input
+                    text={"Number Of Employees"}
+                    name="numberOfEmployees"
+                    id="numberOfEmployees"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.numberOfEmployees}
+                    formT={RegisterForm.touched.numberOfEmployees}
+                    formE={RegisterForm.errors.numberOfEmployees}
+                  />
+                  <Input
+                    text={"Email"}
+                    name="email"
+                    id="email"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.email}
+                    formT={RegisterForm.touched.email}
+                    formE={RegisterForm.errors.email}
+                  />
+                  <Input
+                    text={"Mobile Number"}
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.phoneNumber}
+                    formT={RegisterForm.touched.phoneNumber}
+                    formE={RegisterForm.errors.phoneNumber}
+                  />
+                  <Input
+                    text={"Password"}
+                    type="password"
+                    name="password"
+                    id="password"
+                    onChange={RegisterForm.handleChange}
+                    onBlur={RegisterForm.handleBlur}
+                    value={RegisterForm.values.password}
+                    formT={RegisterForm.touched.password}
+                    formE={RegisterForm.errors.password}
+                  />
+                </div>
               </form>
             </div>
             <div className="modal-footer">

@@ -53,18 +53,20 @@ const Requests = () => {
       headerName: "Pickup Location",
       width: 250,
       renderCell: (params) => (
-        <GoogleMap
-        dispatch={dispatch}
-          initialCenter={{
-            lat: params.row.coordinates.latitude,
-            lng: params.row.coordinates.longitude,
-          }}
-          markerPosition={{
-            lat: params.row.coordinates.latitude,
-            lng: params.row.coordinates.longitude,
-          }}
-          mapStyles={mapStyle}
-        />
+        <div style={mapStyle}>
+          <GoogleMap
+            dispatch={dispatch}
+            initialCenter={{
+              lat: params.row.coordinates.latitude,
+              lng: params.row.coordinates.longitude,
+            }}
+            markerPosition={{
+              lat: params.row.coordinates.latitude,
+              lng: params.row.coordinates.longitude,
+            }}
+            mapStyles={mapStyle}
+          />
+        </div>
       ),
     },
     {
@@ -74,17 +76,20 @@ const Requests = () => {
       renderCell: (params) =>
         params.row.dropOffLocation !== null &&
         params.row.dropOffLocation.latitude !== null ? (
-          <GoogleMap
-            initialCenter={{
-              lat: params.row.dropOffLocation.latitude,
-              lng: params.row.dropOffLocation.longitude,
-            }}
-            markerPosition={{
-              lat: params.row.dropOffLocation.latitude,
-              lng: params.row.dropOffLocation.longitude,
-            }}
-            mapStyles={mapStyle}
-          />
+          <div style={mapStyle}>
+            <GoogleMap
+              dispatch={dispatch}
+              initialCenter={{
+                lat: params.row.dropOffLocation.latitude,
+                lng: params.row.dropOffLocation.longitude,
+              }}
+              markerPosition={{
+                lat: params.row.dropOffLocation.latitude,
+                lng: params.row.dropOffLocation.longitude,
+              }}
+              mapStyles={mapStyle}
+            />
+          </div>
         ) : (
           <div>null</div>
         ),
@@ -114,7 +119,7 @@ const Requests = () => {
       <TableComponent
         rows={rows}
         columns={columns}
-        rowHeight={110}
+        rowHeight={90}
         type={"requests"}
         func={handleEmergencyRequestCancel}
       />
