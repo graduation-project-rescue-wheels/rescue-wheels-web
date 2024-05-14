@@ -1,0 +1,49 @@
+.homePic {
+  /* transition: all 0.5s; */
+  animation: 2s ease-out;
+}
+.info {
+  animation: 1s ease-out;
+}
+.applyBtn {
+  color: var(--secondry-color);
+  padding: 10px;
+  border-radius: 10px;
+  width: fit-content;
+  position: relative;
+  background-color: var(--main-color);
+}
+.applyIcon {
+  position: absolute;
+  right: -20%;
+  color: var(--main-color);
+  animation: infiniteMove 0.5s infinite ease-in-out;
+}
+
+@keyframes rtl {
+  from {
+    right: -100%;
+  }
+  to {
+    right: 0%;
+  }
+}
+
+@keyframes ltr {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 0%;
+  }
+}
+
+@keyframes infiniteMove {
+  0%,
+  100% {
+    right: -20%;
+  }
+  50% {
+    right: -25%;
+  }
+}
