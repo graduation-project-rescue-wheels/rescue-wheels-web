@@ -25,13 +25,14 @@ import LandingPage from './pages/LandingPage/LandingPage'
 function App() {
   let router = createBrowserRouter([
     // { path: '/', element: <Login /> },
+    { path: "/", element: <LandingPage /> },
     { path: "/login", element: <Login /> },
     { path: "/Register", element: <Register /> },
     {
       path: "/",
       element: <Layout />,
       children: [
-        { path: "/", element: <LandingPage /> },
+        
         { path: "/HomePage", element: <HomePage /> },
         { path: "/Settings", element: <Settings /> },
         { path: "/Vehicles", element: <Vehicles /> },

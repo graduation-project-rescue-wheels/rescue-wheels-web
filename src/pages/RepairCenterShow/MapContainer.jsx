@@ -41,7 +41,7 @@ class MapContainer extends React.Component {
               lng: point.lng(),
             }))}
             options={{
-              strokeColor: "#0000FF",
+              strokeColor: "#2E2EC5",
               strokeOpacity: 0.8,
               strokeWeight: 4,
             }}

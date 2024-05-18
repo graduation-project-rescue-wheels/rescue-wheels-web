@@ -15,10 +15,13 @@ const socket = io('http://localhost:3000/',{
 const Emergency = () => {
     const [vehicles, setVehicles] = useState([]);
     const [User , setUser] = useState({})
+    const [responderData,setresponderData] = useState([]);
+    const [responder,setresponder]=useState(false);
     const [currentLocation, setCurrentLocation] = useState(null);
     const [UserHaveRequest , setUserHaveRequest] = useState(false);
     const { lat, lng } = useSelector(x=>x.MapController)
     const [requestData,setRequestData] = useState({})
+    const [clickedMarkerPosition,setclickedMarkerPosition] = useState({})
     console.log(lat,lng);
     const [FormData,setFormData] = useState({
         vehicle :"",
@@ -67,6 +70,7 @@ const Emergency = () => {
         // console.log(res.payload.request.state == "cancelled" );
         if(res.payload.request.state == "cancelled"){
             setUserHaveRequest(false)
+            setresponder(false)
         }
         
     }
@@ -109,10 +113,14 @@ const Emergency = () => {
         socket.connect()
         socket.on('request:accepted', (request) => {
             console.log('New request added:', request);
+            setresponderData(request.responder)
+            setresponder(true);
+
         });
         socket.on('request:responder-cancel', (request) => {
             console.log(' responder cancel request', request);
             setUserHaveRequest(false)
+            setresponder(false)
         });
 
         
@@ -131,15 +139,24 @@ const Emergency = () => {
         initialCenter={currentLocation}
           markerPosition={currentLocation}
           dispatch={dispatch}
-  clickedMarkerPosition={{ lat: 29.9892736 , lng: 31.1894304 }} // Example clicked marker position
-//   directions={/* Pass the directions object here */}
+          distination={clickedMarkerPosition}
+          
     />
     <div style={{  bottom: 60, left: 20 }} className="rounded-4 d-flex py-4 justify-content-center align-items-end w-25 bg-white border p-2 border-2 position-absolute">
             {(UserHaveRequest)?
             <div>
             <div className="w-100">
-      <LoaderProgress />
+
+                {responder?<div>
+                    <LoaderProgress />
+      <h5 className="mt-3">{responderData.firstName +" " +responderData.lastName+" "
+} is on his way</h5>
+                
+                </div>:
+                <div>
+                <LoaderProgress />
       <h5 className="mt-3">Connection To Your technician</h5>
+                </div>}
       </div>
       <button className="btn btn-danger my-3 w-100" onClick={handleCancleRequset}>Cancle</button>
 
