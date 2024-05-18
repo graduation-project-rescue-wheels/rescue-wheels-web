@@ -6,10 +6,11 @@ import { showErrorToast, showSuccessToast } from "../components/toast";
 export const AddRepairCenter = createAsyncThunk(
   "RepairCenter/AddRepairCenter",
   async (formData) => {
+    const body = formData
     try {
       const response = await axios.post(
         "http://localhost:3000/RepairCenter/AddRepairCenter",
-        formData, 
+        body, 
         {
           headers: {
             accessToken: "prefixToken_" + localStorage.getItem("Token"),

@@ -1,120 +1,136 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GetspacificepairCenter } from "../../store/RepairCenterSlice";
-import GoogleMap from "./GoogleMap"; // Import the GoogleMap component
-import { Table } from "react-bootstrap";
-import {
-  Paper,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import img from "../../assets/5098287-Photoroom.png-Photoroom.png";
-import Loading from "../../components/Loading/Loading";
+import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import { AddReservationClient, deleteReservationClient, updateReservationClient } from '../../store/ReservationSlice';
 
 const RepairCenterShow = () => {
-  const [currentLocation, setCurrentLocation] = useState(null);
-
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const [repairData, setRepairData] = useState([]);
-  const [image, setImage] = useState("");
-  const [dataFetched, setDataFetched] = useState(false);
-  const fetchRepairData = async () => {
-    // setDataFetched(true);
-    const res = await dispatch(GetspacificepairCenter(id));
-    setRepairData(res.payload.data);
-    console.log("Repair center data fetched successfully:", repairData);
-    // setImage(res.payload.data.Image.secure_url);
-    console.log(res.payload.data.location.coords);
-    setCurrentLocation({
-      lat: res.payload.data.location.coords.latitude,
-      lng: res.payload.data.location.coords.longitude,
-    });
-    setDataFetched(true);
-  };
 
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentLocation({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.error("Error getting the current location:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
+  const [state, setState] = useState({
+    repairData: [],
+    reservations: [],
+    image: '',
+    dataFetched: false,
+  });
+  const { reservations, image } = state;
+  const currentDate = new Date();
+  const views = ['day', 'week', 'month'];
+
+
+
+ const resourcesData = [
+    {
+      id: 1,
+      color: '#cb6bb2',
+    },
+    {
+      id: 2,
+      color: '#56ca85',
+    },
+    {
+      id:3,
+      color: '#E40D80',
+    },
+    {
+      id:4,
+      color: '#C47011',
+    },]
+  const dispatch = useDispatch();
+
+  const fetchRepairData = async () => {
+    setState((prevState) => ({ ...prevState, dataFetched: true }));
+    try {
+      const res = await dispatch(GetspacificepairCenter(id));
+      const repairData = res.payload.data.Technicians;
+      const reservations = res.payload.data.Reservations.map((el) => ({
+        ...el,
+        ownerId:(el.status=="New")?[1]:[2],
+        // ownerId: [2],
+        text: el.title,
+        startDate: new Date(el.startDate),
+        endDate: new Date(el.endDate),
+      }));
+      const image = res.payload.data.Image?.secure_url || '';
+
+      setState({ repairData, reservations, image, dataFetched: false });
+      console.log("Repair center data fetched successfully:", repairData);
+    } catch (error) {
+      console.error("Failed to fetch repair center data:", error);
+      setState((prevState) => ({ ...prevState, dataFetched: false }));
     }
   };
 
+
   useEffect(() => {
     fetchRepairData();
-    // getCurrentLocation();
-  }, []);
-  const initialCenter = currentLocation;
-  const markerPosition = currentLocation;
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    console.log("Updated Reservations:", state.reservations);
+  }, [state.reservations]);
+
+  const onAppointmentAdded = async (e) => {
+    const formData = {
+        title: e.appointmentData.text,
+        description: e.appointmentData.description,
+        startDate: new Date(e.appointmentData.startDate),
+        endDate: new Date(e.appointmentData.endDate)
+    };
+    console.log(formData);
+    const res = await dispatch(AddReservationClient({ id: id, formData: formData })); // Pass id and formData as payload
+    console.log(res);
+    console.log(e.appointmentData);
+};
+const AppointmentUpdated = async(e)=>{
+
+  const formData = {
+    title: e.appointmentData.text,
+    description: e.appointmentData.description,
+    startDate: new Date(e.appointmentData.startDate),
+    endDate: new Date(e.appointmentData.endDate)
+};
+console.log(formData);
+const res = await dispatch(updateReservationClient({ id: e.appointmentData._id, formData: formData })); // Pass id and formData as payload
+console.log(res);
+console.log(e.appointmentData);
+}
+
+const AppointmentDeleted=async(e)=>{
+const res = await dispatch(deleteReservationClient({ id: e.appointmentData._id })); // Pass id and formData as payload
+console.log(res);
+console.log(e.appointmentData);
+}
 
   return (
     <>
-      {dataFetched ? (
-        <>
-          <div className="mx-auto text-center">
-            <img
-              src={repairData.Image ? repairData.Image.secure_url : img}
-              className="w-25"
-              alt=""
-            />
-          </div>
-          <div className="col-md-6 mx-auto">
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="right">Email</TableCell>
-                    <TableCell align="right">Phone</TableCell>
-                    <TableCell align="right">Number Of Requests</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/* {repairData?.map((row) => ( */}
-                  <TableRow
-                    key={repairData.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {repairData.name}
-                    </TableCell>
-                    <TableCell align="right">{repairData.email}</TableCell>
-                    <TableCell align="right">
-                      {repairData.phoneNumber}
-                    </TableCell>
-                    <TableCell align="right">{0}</TableCell>
-                  </TableRow>
-                  {/* ))} */}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-          <div className="mt-5 bg-black d-block ">
-            <GoogleMap
-              dispatch={dispatch}
-              initialCenter={initialCenter}
-              markerPosition={markerPosition}
-            />
-          </div>
-        </>
-      ) : (
-        <div className="mt-5">
-          <Loading />
-        </div>
-      )}
+      <div className="mx-auto text-center mt-3">
+        {image && <img src={image} style={{ width: '100px' }} alt="Repair Center" />}
+      </div>
+      <div className='container-fluid' style={{ color: 'red' }}>
+        <Scheduler
+          timeZone="Africa/Cairo"
+          dataSource={reservations}
+          views={views}
+          defaultCurrentView="week"
+          defaultCurrentDate={currentDate}
+          height={730}
+          startDayHour={12}
+          onAppointmentAdded={onAppointmentAdded}
+          onAppointmentUpdated={AppointmentUpdated}
+          onAppointmentDeleted={AppointmentDeleted}
+        >
+          {/* <Resource
+      fieldExpr="ownerId"
+      allowMultiple={true}
+      dataSource={resourcesData}
+      // label="Owner"
+      // useColorAsDefault={true}
+    /> */}
+        </Scheduler>
+        
+      </div>
     </>
   );
 };

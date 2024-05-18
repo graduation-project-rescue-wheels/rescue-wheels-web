@@ -28,11 +28,16 @@ const Technician = () => {
     console.log(NearByRequest);
     
   }
-  const destinationLocation = { lat: 34.0522, lng: -118.2437 };
+  const [clickedMarkerPosition,setclickedMarkerPosition] = useState({lat:0.00,lng:0.00})
   const acceptRequestt=async(id)=>{
     const formdata = {id}
     const res =  await dispatch(acceptRequest(formdata))
     console.log(res);
+    // setclickedMarkerPosition(res.payload.coordinates)
+    setclickedMarkerPosition( { lat:res.payload.request
+      .coordinates.latitude, lng:res.payload.request
+      .coordinates.longitude});
+
     if(res.payload.request.state === "inProgress"){
       setAccept(true)
     }
@@ -42,7 +47,7 @@ const Technician = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setCurrentLocation({ lat: latitude, lng: longitude });
+          setCurrentLocation({ lat: latitude+0.01, lng: longitude+0.01 });
         },
         (error) => {
           console.error('Error getting the current location:', error);
@@ -58,6 +63,7 @@ const Technician = () => {
     console.log(res);
     setNearByRequest([])
     setAccept(false)
+    setclickedMarkerPosition(currentLocation)
   }
 
   // const acceptRequest
@@ -86,6 +92,7 @@ const Technician = () => {
         setNearByRequest({})
       }
       setAccept(false)
+      setclickedMarkerPosition(currentLocation)
 
       
          
@@ -103,7 +110,7 @@ const Technician = () => {
         initialCenter={currentLocation}
           markerPosition={currentLocation}
           dispatch={dispatch}
-          clickedMarkerPosition={destinationLocation}
+          distination={clickedMarkerPosition}
 
           
     />
