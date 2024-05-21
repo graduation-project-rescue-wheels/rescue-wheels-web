@@ -1,0 +1,45 @@
+.popup {
+    position: absolute;
+    visibility: hidden;
+    transition: all 0.5s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+    z-index: 10000;
+    background-color: var(--secondry-color);
+    min-height: 350px;
+    min-width: 450px;
+    padding: 5rem 2.5rem;
+    border-radius: 1.5rem;
+    gap: 2rem;
+  }
+  .popup.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .popup button {
+    width: 60%;
+    border: none;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+    background-color: var(--main-color);
+    color: var(--secondry-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 1px solid var(--main-color);
+    transition: all 0.3s;
+  }
+  .popup button:hover {
+    color: var(--main-color);
+    background-color: var(--secondry-color);
+  }
+  .popup .icon {
+    border: 2px solid var(--main-color);
+    border-radius: 50%;
+    padding: 2rem;
+    width: 150px;
+    height: 150px;
+    opacity: 1;
+  }
