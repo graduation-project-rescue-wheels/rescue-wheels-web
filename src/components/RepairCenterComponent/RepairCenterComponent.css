@@ -1,14 +1,24 @@
-.componenthover{
-    background-color: #f2f2f2;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-    /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
-    border: #ffffff 2px solid;
-
-    transition: 0.3s;
+.componenthover {
+  position: relative;
+  background-color: #f2f2f2;
+  overflow: hidden;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  color: #0f0f0f9c;
+  border: #ffffff 2px solid;
+  transition: 0.3s;
+  height: 500px;
+  flex-basis: 535px;
+  flex-grow: 1;
+  border-radius: 1.5rem;
 }
-.componenthover:hover{
-    box-shadow: 0 8px 16px 0 var(--secondry-color);
-    border: var(--secondry-color) 2px solid;
+.componenthover:hover {
+  box-shadow: 0 8px 16px 0 var(--secondry-color);
+  border: var(--secondry-color) 2px solid;
+}
+.bookBtn:hover {
+  background-color: transparent !important;
+  color: var(--main-color) !important;
 }
