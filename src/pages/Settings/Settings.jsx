@@ -14,8 +14,10 @@ const Settings = () => {
 
   const inputRef = useRef(null);
   const [image, setImage] = useState();
-
-  const user = useSelector((state) => state.AuthData.UserData);
+  const [user, setUser] = useState(
+    useSelector((state) => state.AuthData.UserData)
+  );
+  // console.log(user);
   const form = new FormData();
 
   let infoValidationSchema = YUP.object({
@@ -80,12 +82,14 @@ const Settings = () => {
       formData = InfoUpdateForm.values;
     }
 
+    image && form.append("image", image);
+
     for (var key in formData) {
       form.append(key, formData[key]);
     }
-    form.append("image", image);
-    await dispatch(UpdateUser(form));
-    await dispatch(getUserData());
+
+    const res = await dispatch(UpdateUser(form));
+    res.payload.updatedUser && setUser(res.payload.updatedUser);
   }
 
   function handleInputSubmit() {
@@ -128,7 +132,10 @@ const Settings = () => {
             </button>
           </div>
         </nav>
-        <div className="tab-content w-75 shadow-lg bg-white" id="nav-tabContent">
+        <div
+          className="tab-content w-75 shadow-lg bg-white"
+          id="nav-tabContent"
+        >
           <div
             className="tab-pane fade show active"
             id="nav-personal-information"
@@ -144,12 +151,21 @@ const Settings = () => {
                     style={{ position: "relative", width: "80%" }}
                     onClick={handleInputSubmit}
                   >
-                    <img
-                      src={user.profilePic ? user.profilePic : img}
-                      alt=""
-                      className="rounded-circle pic w-100"
-                      style={{ aspectRatio: "1 / 1" }}
-                    />
+                    {image ? (
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt=""
+                        className="rounded-circle pic w-100"
+                        style={{ aspectRatio: "1 / 1" }}
+                      />
+                    ) : (
+                      <img
+                        src={user.profilePic ? user.profilePic : img}
+                        alt=""
+                        className="rounded-circle pic w-100"
+                        style={{ aspectRatio: "1 / 1" }}
+                      />
+                    )}
                     <input
                       type="file"
                       className="btn mt-2"
