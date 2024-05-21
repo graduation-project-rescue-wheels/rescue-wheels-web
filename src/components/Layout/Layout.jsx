@@ -1,17 +1,25 @@
-
-import { Outlet } from 'react-router-dom'
-import Navbar from '../Navbar/Navbar'
+import { Outlet, useNavigate } from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
+import { useEffect } from "react";
 
 export default function Layout() {
-  return (
-    <div >
+  const authToken = localStorage.getItem("Token");
+  const navigate = useNavigate();
 
-    <Navbar/>
-    {/*  */}
-   
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/login");
+    }
+  }, []);
+
+  return (
     <div>
-    <Outlet/>
+      <Navbar />
+      {/*  */}
+
+      <div>
+        <Outlet />
+      </div>
     </div>
-    </div>
-  )
+  );
 }

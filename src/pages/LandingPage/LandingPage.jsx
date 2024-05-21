@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import img from "../../assets/car-service.gif";
 import img2 from "../../assets/mechanics-repairing-car-in-service-station-2953459-2451647.png";
 import img3 from "../../assets/hand-with-smartphone-device-icon_18591-82599-removebg-preview.png";
@@ -7,13 +7,30 @@ import { Link } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 
 const LandingPage = () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver((e) => {
+      e.forEach((el) => {
+        if (el.isIntersecting) {
+          el.target.classList.add("show");
+        } else {
+          el.target.classList.remove("show");
+        }
+      });
+    });
+
+    const hiddenREl = document.querySelectorAll(".hiddenL");
+    const hiddenLEl = document.querySelectorAll(".hiddenR");
+    hiddenREl.forEach((el) => observer.observe(el));
+    hiddenLEl.forEach((el) => observer.observe(el));
+  }, []);
+
   return (
     <div className="d-flex flex-column container gap-5">
       <div
         className="d-flex justify-content-evenly landing mt-5"
         style={{ overflow: "hidden" }}
       >
-        <div className="info position-relative w-100 d-flex flex-column justify-content-center">
+        <div className="info position-relative w-100 d-flex flex-column justify-content-center hiddenL">
           <p style={{ fontSize: "4rem", fontWeight: "bold" }}>Rescue Wheels</p>
           <p style={{ lineHeight: "2" }}>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
@@ -26,7 +43,7 @@ const LandingPage = () => {
             <ArrowRightAltIcon className="applyIcon" />
           </Link>
         </div>
-        <div className="homePic w-100 d-flex justify-content-end position-relative">
+        <div className="homePic w-100 d-flex justify-content-end position-relative hiddenR">
           <img src={img} alt="" />
         </div>
       </div>
@@ -35,10 +52,10 @@ const LandingPage = () => {
         className="d-flex justify-content-evenly landing mt-5"
         style={{ overflow: "hidden" }}
       >
-        <div className="homePic w-100 d-flex justify-content-start position-relative">
+        <div className="homePic w-100 d-flex justify-content-start position-relative hiddenL">
           <img src={img2} alt="" />
         </div>
-        <div className="info position-relative w-100 d-flex flex-column justify-content-center">
+        <div className="info position-relative w-100 d-flex flex-column justify-content-center hiddenR">
           <p style={{ fontSize: "4rem", fontWeight: "bold" }}>Repair Centers</p>
           <p style={{ lineHeight: "2" }}>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
@@ -57,7 +74,7 @@ const LandingPage = () => {
         className="d-flex justify-content-evenly landing mt-5"
         style={{ overflow: "hidden" }}
       >
-        <div className="info position-relative w-100 d-flex flex-column justify-content-center">
+        <div className="info position-relative w-100 d-flex flex-column justify-content-center hiddenL">
           <p style={{ fontSize: "4rem", fontWeight: "bold" }}>
             It’s easier in the apps
           </p>
@@ -74,7 +91,7 @@ const LandingPage = () => {
             Get it on App Store
           </Link>
         </div>
-        <div className="homePic w-100 d-flex justify-content-end position-relative">
+        <div className="homePic w-100 d-flex justify-content-end position-relative hiddenR">
           <img src={img3} alt="" />
         </div>
       </div>

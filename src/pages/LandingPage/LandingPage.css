@@ -1,9 +1,17 @@
-.homePic {
-  /* transition: all 0.5s; */
-  animation: 2s ease-out;
+.hiddenL,
+.hiddenR {
+  opacity: 0;
+  transition: all 1s;
 }
-.info {
-  animation: 1s ease-out;
+.hiddenL {
+  transform: translateX(-100%);
+}
+.hiddenR {
+  transform: translateX(100%);
+}
+.show {
+  opacity: 1;
+  transform: translateX(0);
 }
 .applyBtn {
   color: var(--secondry-color);
@@ -20,21 +28,9 @@
   animation: infiniteMove 0.5s infinite ease-in-out;
 }
 
-@keyframes rtl {
-  from {
-    right: -100%;
-  }
-  to {
-    right: 0%;
-  }
-}
-
-@keyframes ltr {
-  from {
-    left: -100%;
-  }
-  to {
-    left: 0%;
+@media (max-width: 991px) {
+  .homePic.d-flex {
+    display: none !important;
   }
 }
 

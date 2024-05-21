@@ -207,7 +207,7 @@ const RepairCenters = () => {
 
                     <GooglePlacesAutocomplete
                       className="form-control"
-                      apiKey="AIzaSyB4BFqNlmu7N27rHdSydssJiyHvpvgzSc8"
+                      apiKey={import.meta.env.VITE_API_KEY}
                       selectProps={{
                         address,
                         onChange: setAddress,
