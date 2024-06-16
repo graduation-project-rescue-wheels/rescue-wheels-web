@@ -41,6 +41,8 @@ function App() {
         { path: "Emergency", element: <Emergency /> },
         { path: "Technician", element: <Technician /> },
         { path: "History", element: <History /> },
+        { path: "Rating/:idRepairCenter/:idReservation", element: <History /> },
+        
       ]
     },
     {
