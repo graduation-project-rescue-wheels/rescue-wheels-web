@@ -21,13 +21,20 @@ import Emergency from './pages/Emergency/Emergency'
 import Technician from './pages/Technician/Technician'
 import History from './pages/History/History'
 import LandingPage from './pages/LandingPage/LandingPage'
+import ForgetPassword from './pages/ForgetPassword/ForgetPassword'
+import OTP from './pages/ForgetPassword/Otp'
+import ResetPassword from './pages/ForgetPassword/ResetPassword'
 
 function App() {
   let router = createBrowserRouter([
     // { path: '/', element: <Login /> },
     { path: "/", element: <LandingPage /> },
     { path: "/login", element: <Login /> },
-    { path: "/Register", element: <Register /> },
+    { path: "/signUp", element: <Register /> },
+    {path:'/ForgetPassword',element:<ForgetPassword/>},
+    {path:'/OTP',element:<OTP/>},
+    {path:'/ResetPassword',element:<ResetPassword/>},
+    { path: "/VerifyEmail/:userToken", element: <VerifyEmail /> },
     {
       path: "/",
       element: <Layout />,
@@ -36,7 +43,6 @@ function App() {
         { path: "/HomePage", element: <HomePage /> },
         { path: "/Settings", element: <Settings /> },
         { path: "/Vehicles", element: <Vehicles /> },
-        { path: "/VerifyEmail/:userToken", element: <VerifyEmail /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
         { path: "Emergency", element: <Emergency /> },
         { path: "Technician", element: <Technician /> },

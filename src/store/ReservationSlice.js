@@ -10,7 +10,7 @@ export const AddReservationClient = createAsyncThunk(
     console.log(formData);
     try {
       const response = await axios.post(
-        `http://localhost:3000/Reservation/addReservation/${id}`,
+       `${import.meta.env.VITE_SERVER_URL}/Reservation/addReservation/${id}`,
         formData,
         {
           headers: {
@@ -38,7 +38,7 @@ export const updateReservationClient = createAsyncThunk(
     console.log(formData);
     try {
       const response = await axios.put(
-        `http://localhost:3000/Reservation/updateReservation/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/Reservation/updateReservation/${id}`,
         formData,
         {
           headers: {
@@ -66,7 +66,7 @@ export const deleteReservationClient = createAsyncThunk(
     // Destructure id and formData from payload
     try {
       const response = await axios.delete(
-        `http://localhost:3000/Reservation/deleteReservation/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/Reservation/deleteReservation/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),

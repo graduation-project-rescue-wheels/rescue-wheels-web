@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { GoogleApiWrapper } from 'google-maps-react';
 import Loader from '../../components/Loader/Loader';

@@ -9,7 +9,7 @@ export const AddRepairCenter = createAsyncThunk(
     const body = formData
     try {
       const response = await axios.post(
-        "http://localhost:3000/RepairCenter/AddRepairCenter",
+        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/AddRepairCenter`,
         body, 
         {
           headers: {
@@ -44,7 +44,7 @@ export const GetAllRepairCenters = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/RepairCenter/GetAllRepairCenters",
+        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/GetAllRepairCenters`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -66,7 +66,7 @@ export const GetspacificepairCenter = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/RepairCenter/GetSingleRepairCenter/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/GetSingleRepairCenter/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -89,7 +89,7 @@ export const deleteRepairCenterById = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.delete(
-        `http://localhost:3000/RepairCenter/DeleteRepairCenterById/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/DeleteRepairCenterById/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + accessToken,

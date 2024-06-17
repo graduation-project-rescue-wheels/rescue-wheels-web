@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
 import * as YUP from "yup";
-import img from "../../assets/143086968_2856368904622192_1959732218791162458_n.png";
+import img from "../../Assents/143086968_2856368904622192_1959732218791162458_n.png";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateUser, UpdatePassword, getUserData } from "../../store/AuthSlice";
 import { Toaster } from "react-hot-toast";

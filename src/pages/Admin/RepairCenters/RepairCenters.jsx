@@ -2,7 +2,7 @@ import AdminNav from "../../../components/AdminNav/AdminNav";
 import * as YUP from "yup";
 import { useFormik } from "formik";
 import Input from "../../../components/Input";
-import img from "../../../assets/143086968_2856368904622192_1959732218791162458_n.png";
+import img from "../../../Assents/143086968_2856368904622192_1959732218791162458_n.png";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";

@@ -6,7 +6,7 @@ export const GetAllVehicles = createAsyncThunk(
     "Vehicle/GetAllVehicles",
     async()=>{
         try{
-             const response = await axios.get("http://localhost:3000/vehicle/GetAllvehicleForLoginUser",{
+             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/vehicle/GetAllvehicleForLoginUser`,{
                     headers:{
                         accesstoken:"prefixToken_"+localStorage.getItem("Token")
                     }
@@ -30,7 +30,7 @@ export const addVehicle = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.post(
-        "http://localhost:3000/vehicle/addVehicle",
+        `${import.meta.env.VITE_SERVER_URL}/vehicle/addVehicle`,
         body,
         {
           headers: {
@@ -66,7 +66,7 @@ export const getVehicleById = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.get(
-        `http://localhost:3000/vehicle/getVehicleById/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/vehicle/getVehicleById/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + accessToken,
@@ -101,7 +101,7 @@ export const deleteVehicle = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.delete(
-        `http://localhost:3000/vehicle/deleteVehicle/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/vehicle/deleteVehicle/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + accessToken,
