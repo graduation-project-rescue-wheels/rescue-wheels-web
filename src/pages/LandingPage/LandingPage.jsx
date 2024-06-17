@@ -9,10 +9,18 @@ import image1 from '../../Assents/OnBording/car (2).png'
 import image2 from '../../Assents/OnBording/engine.png'
 import image3 from '../../Assents/OnBording/car-painting (1).png'
 import image4 from '../../Assents/OnBording/car.png'
+import image5 from '../../Assents/OnBording/tow-truck.png'
+import image6 from '../../Assents/OnBording/disc-brake.png'
+import image7 from '../../Assents/OnBording/car-battery.png'
+import image8 from '../../Assents/OnBording/diesel.png'
+import google from '../../Assents/OnBording/Google Play Black.svg'
+import AppStore from '../../Assents/OnBording/App Store Black.svg'
 import CustomTitle from './CustomTitle';
 import NavLanding from "./NavLanding";
 import LandingPageServicesComponent from "./LandingPageServicesComponent";
 import './LandingPage.css'
+import Brands from "./Brands";
+import WorkWithUs from "./WorkWithUs";
 const LandingPage = () => {
 
   return (
@@ -57,9 +65,18 @@ const LandingPage = () => {
       {/* Services */}
       <div className='container mt-5 p-0' id='services'>
       <div className='text-center  mt-5 pt-5'><CustomTitle title={"Services"}/></div>
+    
         <div className='row m-0 '>
+        <div className='col-md-6 p-4'>
+<LandingPageServicesComponent img={image5} text={"Car Towing"} bgText={"bg-dark"}  bgColor={"bg-white"}  colo2="text-dark" color="text-white"/>
+
+        </div>
         <div className='col-md-6 p-4 '>
         <LandingPageServicesComponent img={image1} bgText={"bg-white"} text={"wheels Repair"} bgColor={"bg-dark"}  colo2="text-white" color="text-dark"/>
+
+        </div>
+        <div className='col-md-6 p-4 '>
+        <LandingPageServicesComponent img={image3} bgText={"bg-white"} text={"Car painting"} bgColor={"bg-dark"}  colo2="text-white" color="text-dark"/>
 
         </div>
         <div className='col-md-6 p-4'>
@@ -70,13 +87,54 @@ const LandingPage = () => {
 <LandingPageServicesComponent img={image4} text={"Body Repair"}  bgText={"bg-dark"}  bgColor={"bg-white"}  colo2="text-dark" color="text-white"/>
 
         </div>
+        
+        
         <div className='col-md-6 p-4 '>
-        <LandingPageServicesComponent img={image3} bgText={"bg-white"} text={"Car painting"} bgColor={"bg-dark"}  colo2="text-white" color="text-dark"/>
+        <LandingPageServicesComponent img={image6} bgText={"bg-white"} text={"Disc Brake"} bgColor={"bg-dark"}  colo2="text-white" color="text-dark"/>
 
         </div>
-  
+        <div className='col-md-6 p-4 '>
+        <LandingPageServicesComponent img={image8} bgText={"bg-white"} text={"Diesel"} bgColor={"bg-dark"}  colo2="text-white" color="text-dark"/>
+
+        </div>
+        <div className='col-md-6 p-4'>
+<LandingPageServicesComponent img={image7} text={"Battery"}  bgText={"bg-dark"}  bgColor={"bg-white"}  colo2="text-dark" color="text-white"/>
+
+        </div>
+        
+        </div>
+        <div className="text-center mt-5">
+        <h5 className='fw-light' style={{fontSize:"25px",color:'#362e93'}} >Servicing and repair the Area’s</h5>
+        <h5 className="fw-bold mb-5" style={{fontSize:"40px",color:'#362e93'}}>Most Popular Brands</h5>
+        <Brands/>
         </div>
       </div>
+
+      <div className="container">
+              <div className='text-center  mt-5 pt-5'><CustomTitle title={"With Us"}/></div>
+              <WorkWithUs/>
+      </div>
+
+
+      <div className="container mb-5" >
+      <div className="text-center">
+      <h5 className='fw-bold' style={{fontSize:"25px",color:'#362e93'}} >Download our App now and enjoy our services</h5>
+        <div className="d-flex mt-5 justify-content-center align-items-center">
+          <div className="me-3">
+            <img src={google}/>
+          </div>
+          <div>
+            <img src={AppStore}/>
+          </div>
+        </div>
+      </div>
+      
+
+
+          </div>
+          <div className=" py-5" style={{backgroundColor:'#362e93'}} >
+
+          </div>
     </div>
   )
 };
