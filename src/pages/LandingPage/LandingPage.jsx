@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import img from "../../assets/car-service.gif";
-import img2 from "../../assets/mechanics-repairing-car-in-service-station-2953459-2451647.png";
-import img3 from "../../assets/hand-with-smartphone-device-icon_18591-82599-removebg-preview.png";
+import img from "../../Assents/OnBording/car-service.gif";
+import img2 from "../../Assents/OnBording/mechanics-repairing-car-in-service-station-2953459-2451647.png";
+import img3 from "../../Assents/OnBording/hand-with-smartphone-device-icon_18591-82599-removebg-preview.png";
 import "./LandingPage.css";
 import { Link } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";

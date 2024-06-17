@@ -1,22 +1,29 @@
+import  { useState } from "react";
+import style from "../../Assents/Style/Auth.module.css";
+import logo from "../../Assents/Images/Auth/logoo.png";
+import ArrowTop from "../../Assents/Images/Auth/ArrowTop.png";
+import ArrowBottom from "../../Assents/Images/Auth/ArrowBottom.png";
 import { useFormik } from "formik";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import * as YUP from "yup";
-import img1 from "../../assets/Saly-3 (1).png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { HandelRegister } from "../../store/AuthSlice";
-import { Toaster } from "react-hot-toast";
-import Input from "../../components/Input";
-import { showErrorToast, showSuccessToast } from "../../components/toast";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const navigate = useNavigate();
-  let [errMessage, setErrMessage] = useState("");
-  let [loading, setLoading] = useState(false);
 
-  let validationSchema = YUP.object({
-    firstName: YUP.string().required("Name is required"),
-    lastName: YUP.string().required("Name is required"),
+  let [ErrorMessage, setErrorMessage] = useState("");
+  let [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [alertType,setalertType]=useState("")
+  const navigate = useNavigate()
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  const dispatch = useDispatch()
+  const validationSchema = YUP.object({
+    firstName: YUP.string().required("First Name is required"),
+    lastName:  YUP.string().required("Last Name is required"),
     email: YUP.string()
       .required("Email is required")
       .email("Enter a valid email"),
@@ -34,205 +41,253 @@ const Register = () => {
       .required("Mobile number is required")
       .matches(/^[0-9]{11}$/, "Enter a valid mobile number"),
   });
-
-  let RegisterForm = useFormik({
+  const RegisterForm = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      mobileNumber: "",
-      role: "User",
+        firstName:"",
+        lastName: "",
+        email:"",
+        password: "",
+        confirmPassword:"",
+        mobileNumber:"",
     },
     validationSchema,
-    onSubmit: handleFormSubmitRegister,
+    onSubmit: RegisterSubmit,
   });
-
-  const dispatch = useDispatch();
-  async function handleFormSubmitRegister() {
+  async function RegisterSubmit(val) {
+    console.log(val);
+    localStorage.setItem('email',val.email)
     setLoading(true);
-    setErrMessage("");
-
-    console.log(RegisterForm.values);
-    const res = await dispatch(
-      HandelRegister({
-        firstName: RegisterForm.values.firstName,
-        lastName: RegisterForm.values.lastName,
-        email: RegisterForm.values.email,
-        password: RegisterForm.values.password,
-        mobileNumber: RegisterForm.values.mobileNumber,
-        role: "User",
-      })
-    );
-    setLoading(false);
-    console.log(res);
-    // & Toastify
-    if (res.payload.status === true) {
-      showSuccessToast(res.payload.message + "\nyou will be redirected to login");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2500);
-    } else {
-      showErrorToast(res.payload.message);
+    const res = await dispatch(HandelRegister(val))
+    console.log(res.payload);
+    if (res.payload.status !== true) {
+      setalertType('alert-danger')
+    }else{
+      setalertType('alert-success')
     }
+    setErrorMessage(res.payload.message);
+    setLoading(false);
   }
-
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmNewPasswordVisibility = () => {
+    setShowConfirmNewPassword(!showConfirmNewPassword);
+  };
   return (
-    <>
-      <Toaster position="top-center" reverseOrder={false} />
-      <div className="container-fluid">
-        <div className="row gy-5">
-          <div className="col-md-6 p-0">
-            <div
-              className=""
-              style={{
-                height: "100vh",
-                backgroundColor: "#e48700",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              <div>
-                <img
-                  src={img1}
-                  alt="img1"
-                  style={{
-                    width: "70%",
-                    height: "70%",
-                    bottom: "-2%",
-                    left: "20%",
-                    position: "absolute",
-                  }}
-                />
-              </div>
-              <div
-                className="d-flex flex-column justify-content-center align-items-center h-100 text-light"
-                style={{ position: "relative", zIndex: "8796" }}
-              >
-                <h2>Welcome to Rescue Wheels</h2>
-                <p>Already have an account?</p>
-                <p
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate("/login")}
-                >
-                  Sign In
-                </p>
-              </div>
-            </div>
+    <div>
+      <div className="m-0 p-0">
+        <div className="row m-0 p-0">
+        <div className={[style.bgLeft,"col-md-6 d-none d-lg-block"].join(" ")}>
+         <div className={[style.mainContainer].join(" ")}>
+         <div className={[style.arrow, style.arrowTopLeft].join(" ")}>
+            <img className="w-75" src={ArrowTop} alt="ArrowTop" />
           </div>
-          <div className="col-md-6 p-0 " style={{ height: "100vh" }}>
-            <div className="d-flex flex-column justify-content-center align-items-center h-100 bg-white">
-              <h2>Sign Up</h2>
-              {errMessage && (
-                <div className="alert alert-danger">
-                  <p>{errMessage}</p>
-                </div>
-              )}
-              <form onSubmit={RegisterForm.handleSubmit} className="w-75">
-                <Input
-                  text={"First Name"}
-                  type="firstName"
-                  name="firstName"
-                  id="firstName"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.type}
-                  formT={RegisterForm.touched.firstName}
-                  formE={RegisterForm.errors.firstName}
-                />
 
-                <Input
-                  text={"Last Name"}
-                  type="lastName"
-                  name="lastName"
-                  id="lastName"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.type}
-                  formT={RegisterForm.touched.lastName}
-                  formE={RegisterForm.errors.lastName}
-                />
-
-                <Input
-                  text={"Email"}
-                  type="email"
-                  name="email"
-                  id="email"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.type}
-                  formT={RegisterForm.touched.email}
-                  formE={RegisterForm.errors.email}
-                />
-
-                <Input
-                  text={"Mobile Number"}
-                  type="mobileNumber"
-                  name="mobileNumber"
-                  id="mobileNumber"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.type}
-                  formT={RegisterForm.touched.mobileNumber}
-                  formE={RegisterForm.errors.mobileNumber}
-                />
-
-                <Input
-                  text={"Password"}
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={RegisterForm.handleChange}
-                  onBlur={RegisterForm.handleBlur}
-                  value={RegisterForm.values.type}
-                  formT={RegisterForm.touched.password}
-                  formE={RegisterForm.errors.password}
-                />
-
-                <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    onChange={RegisterForm.handleChange}
-                    onBlur={RegisterForm.handleBlur}
-                    value={RegisterForm.values.confirmPassword}
-                  />
-                  {RegisterForm.touched.confirmPassword &&
-                    RegisterForm.errors.confirmPassword && (
-                      <div className="alert alert-danger mt-2">
-                        {RegisterForm.errors.confirmPassword}
-                      </div>
-                    )}
-                </div>
-
-                <div className="d-flex justify-content-between">
-                  <button
-                    type="submit"
-                    className="btn border-0  w-100"
-                    disabled={
-                      !(RegisterForm.isValid && RegisterForm.dirty) || loading
-                    }
-                    style={{
-                      backgroundColor: "#e48700",
-                      borderBlockColor: "#e48700",
-                      boxShadow: "1px 1px 1px #e48700",
-                    }}
-                  >
-                    {loading ? "Loading..." : "Register"}
-                  </button>
-                </div>
-              </form>
-            </div>
+          {/* Logo */}
+          <div className="w-75 m-auto">
+            <img className="w-50" src={logo} alt="logo" />
           </div>
+
+          <div className={[style.arrow, style.arrowBottomRight].join(" ")}>
+            <img className="w-75" src={ArrowBottom} alt="ArrowTop" />
+          </div>
+         </div>
         </div>
+          <div style={{overflow:'auto'}} className={[style.RegisterFormContainer, "col-md-6"].join(" ")}>
+            {/* Logo */}
+            <div className="w-75 m-auto mt-5">
+              <h6 className={style.h6}>  Sign Up</h6>
+              {ErrorMessage ? (
+                
+                <div className={`alert py-1 ${alertType}`}>
+    <p>{ErrorMessage}</p>
+  </div>
+              ) : (
+                ""
+              )}
+              <div className="mb-3">
+                <label htmlFor="firstName" className="form-label">
+                  {" "}
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  className={[style.input, "form-control"].join(" ")}
+                  id="firstName"
+                  name="firstName"
+                  onChange={RegisterForm.handleChange}
+                  onKeyUp={RegisterForm.handleBlur}
+                  value={RegisterForm.values.firstName}
+                />
+                {RegisterForm.touched.firstName &&
+                RegisterForm.errors.firstName ? (
+                  <div className="alert py-1  alert-danger">
+                    <p>{RegisterForm.errors.firstName}</p>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="lastName" className="form-label">
+                  {" "}
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  className={[style.input, "form-control"].join(" ")}
+                  id="lastName"
+                  name="lastName"
+                  onChange={RegisterForm.handleChange}
+                  onKeyUp={RegisterForm.handleBlur}
+                  value={RegisterForm.values.lastName}
+                />
+                {RegisterForm.touched.lastName &&
+                RegisterForm.errors.lastName ? (
+                  <div className="alert py-1  alert-danger">
+                    <p>{RegisterForm.errors.lastName}</p>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              {/* email */}
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  {" "}
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className={[style.input, "form-control"].join(" ")}
+                  id="email"
+                  name="email"
+                  onChange={RegisterForm.handleChange}
+                  onKeyUp={RegisterForm.handleBlur}
+                  value={RegisterForm.values.email}
+                />
+                {RegisterForm.touched.email &&
+                RegisterForm.errors.email ? (
+                  <div className="alert py-1  alert-danger">
+                    <p>{RegisterForm.errors.email}</p>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              {/* phone */}
+              <div className="mb-3">
+  <label htmlFor="mobileNumber" className="form-label">
+    Phone Number
+  </label>
+  <input
+    type="tel"
+    className={[style.input, "form-control"].join(" ")}
+    id="mobileNumber"
+    name="mobileNumber"
+    onChange={RegisterForm.handleChange}
+    onKeyUp={RegisterForm.handleBlur}
+    value={RegisterForm.values.mobileNumber}
+  />
+  {RegisterForm.touched.mobileNumber && RegisterForm.errors.mobileNumber ? (
+    <div className="alert py-1 alert-danger">
+      <p>{RegisterForm.errors.mobileNumber}</p>
+    </div>
+  ) : (
+    ""
+  )}
+</div>
+
+              <div className="mb-">
+              <label htmlFor="password" className="form-label">
+              Password
+              </label>
+              <div className="input-group">
+                <span
+                  onClick={togglePasswordVisibility}
+                  className={style.showPassword}
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                </span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className={[style.input, "form-control"].join(" ")}
+                  id="password"
+                  name="password"
+                  onChange={RegisterForm.handleChange}
+                  onKeyUp={RegisterForm.handleBlur}
+                  value={RegisterForm.values.password}
+                />
+              </div>{" "}
+              {RegisterForm.touched.password && RegisterForm.errors.password ? (
+                <div className="alert py-1 alert-danger">
+                  <p>{RegisterForm.errors.password}</p>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="mb-2">
+              <label htmlFor="confirmPassword" className="form-label">
+               Password Confirmation
+                     </label>
+              <div className="input-group">
+                <span
+                  onClick={toggleConfirmNewPasswordVisibility}
+                  className={style.showPassword}
+                >
+                  <FontAwesomeIcon icon={showConfirmNewPassword ? faEye : faEyeSlash} />
+                </span>
+                <input
+                  type={showConfirmNewPassword ? "text" : "password"}
+                  className={[style.input, "form-control"].join(" ")}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  onChange={RegisterForm.handleChange}
+                  onKeyUp={RegisterForm.handleBlur}
+                  value={RegisterForm.values.confirmPassword}
+                />
+              </div>{" "}
+              {RegisterForm.touched.confirmPassword && RegisterForm.errors.confirmPassword ? (
+                <div className="alert py-1 alert-danger">
+                  <p>{RegisterForm.errors.confirmPassword}</p>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className={style.rigthTextHead}>
+              
+            </div>
+            {loading ? (
+              <button
+                type="button"
+                className={[style.submitbutton, "btn"].join(" ")}
+              >
+                <i className="fa-solid fa-spinner fa-spin"></i>
+              </button>
+            ) : (
+              <button
+                onClick={RegisterForm.handleSubmit}
+                disabled={!(RegisterForm.isValid && RegisterForm.dirty)}
+                type="submit"
+                className={[style.submitbutton, "btn"].join(" ")}
+              >
+ Sign Up              </button>
+            )}
+          </div>
+          <div className={[style.ToLogin, "my-4"].join(" ")} >
+          <p>Already have an account?
+          <span onClick={()=>navigate('/login')}> Sign In</span>
+            </p>
+
+            </div>
+          </div>
+          
+        </div>
+        
       </div>
-    </>
+    </div>
   );
 };
 

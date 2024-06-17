@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { acceptRequest, cancelResponder, getNearByRequests } from "../../store/EmergencyRequestSlice"
 import GoogleMap from "../RepairCenterShow/GoogleMap";
 import io from 'socket.io-client';
-import tmpImage from '../../assets/usertemp.png'
+import tmpImage from '../../Assents/usertemp.png'
 import Loader from "../../components/Loader/Loader";
 import LoaderProgress from "../../components/Loader/LoaderProgress";
 const socket = io('http://localhost:3000/',{

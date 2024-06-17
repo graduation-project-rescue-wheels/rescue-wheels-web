@@ -1,5 +1,5 @@
 import React from 'react'
-import img from "../../assets/143086968_2856368904622192_1959732218791162458_n.png"
+import img from "../../Assents/143086968_2856368904622192_1959732218791162458_n.png";
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import NotificationsIcon from '@mui/icons-material/Notifications';

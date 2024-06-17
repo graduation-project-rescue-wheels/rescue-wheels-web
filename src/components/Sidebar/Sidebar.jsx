@@ -6,7 +6,7 @@ import CarRepairIcon from "@mui/icons-material/CarRepair";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logoo.png"
+import logo from "../../Assents/Images/Auth/logoo.png"
 
 const Sidebar = () => {
   const navigate = useNavigate();

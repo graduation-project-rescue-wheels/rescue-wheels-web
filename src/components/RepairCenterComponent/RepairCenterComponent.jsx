@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./RepairCenterComponent.css";
-import img from "../../assets/5098287-Photoroom.png-Photoroom.png";
+import img from "../../Assents/OnBording/5098287-Photoroom.png-Photoroom.png";
 import GoogleMap from "../../pages/RepairCenterShow/GoogleMap";
 import { useDispatch } from "react-redux";
 import DescriptionIcon from "@mui/icons-material/Description";

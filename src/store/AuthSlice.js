@@ -9,7 +9,7 @@ export const HandelLogin = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/signIn",
+        `${import.meta.env.VITE_SERVER_URL}/user/signIn`,
         formData
       );
 
@@ -36,7 +36,7 @@ export const HandelRegister = createAsyncThunk(
     let body = formData;
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/signUp",
+        `${import.meta.env.VITE_SERVER_URL}/user/signUp`,
         body
       );
 
@@ -49,8 +49,47 @@ export const HandelRegister = createAsyncThunk(
   }
 );
 
-// &-------------------------------------------------------------------------------------
 
+export const HandelResendEmailToVerify = createAsyncThunk(
+  "Auth/HandelResendEmailToVerify",
+  async (formData) => {
+    console.log(formData);
+    let body = formData;
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/ResendEmailToVerify`,
+        body
+      );
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during registration:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+
+
+// &---------------------------------------------HandelVerifyEmail----------------------------------------
+
+export const HandelVerifyEmail = createAsyncThunk(
+  "auth/handelVerifyEmail",
+  async (formData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/verifyEmail`,
+        formData
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during email verification:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
 // &-----------------------------------------Update Info--------------------------------------------
 
 export const UpdateUser = createAsyncThunk(
@@ -60,7 +99,7 @@ export const UpdateUser = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.put(
-        "http://localhost:3000/user/UpdateUserData",
+        `${import.meta.env.VITE_SERVER_URL}/user/UpdateUserData`,
         body,
         {
           headers: {
@@ -95,7 +134,7 @@ export const UpdatePassword = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.put(
-        "http://localhost:3000/user/UpdatePassword",
+        `${import.meta.env.VITE_SERVER_URL}/user/UpdatePassword`,
         body,
         {
           headers: {
@@ -119,7 +158,60 @@ export const UpdatePassword = createAsyncThunk(
     }
   }
 );
+export const HandelForgetPassword = createAsyncThunk(
+  "auth/handelForgetPassword",
+  async (formData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/forgetPassword`,
+        formData
+      );
 
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during password reset:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+// &----------------------------------------- OTP --------------------------------------------
+
+export const HandelOTP = createAsyncThunk(
+  "auth/handelOTP",
+  async (formData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/otpverification`,
+        formData
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during OTP verification:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+// &----------------------------------------- Reset Password --------------------------------------------
+
+export const HandelResetPassword = createAsyncThunk(
+  "auth/handelResetPassword",
+  async (formData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/ResetPassword`,
+        formData
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during password reset:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
 // &-------------------------------------------------------------------------------------
 
 // &-----------------------------------------get user data--------------------------------------------
@@ -130,7 +222,7 @@ export const getUserData = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.get(
-        "http://localhost:3000/user/getUserData",
+        `${import.meta.env.VITE_SERVER_URL}/user/getUserData`,
         {
           headers: {
             accesstoken: "prefixToken_" + accessToken,
@@ -192,7 +284,7 @@ export const GetAllUsers = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/user/GetAllUsers",
+        `${import.meta.env.VITE_SERVER_URL}/user/GetAllUsers`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -274,7 +366,24 @@ let AuthSlice = createSlice({
         console.log(action.payload.data);
       }
     });
-
+    //^ HandelVerifyEmail
+    builder.addCase(HandelVerifyEmail.fulfilled, (state, action) => {
+      state.UserData = action.payload.userData;
+      console.log(action.payload.userData);
+    });
+    builder.addCase(HandelVerifyEmail.rejected, (state, action) => {
+      state.UserData = action.payload.userData;
+      console.log(action.payload.userData);
+    });
+    //^HandelResendEmailToVerify
+    builder.addCase(HandelResendEmailToVerify.fulfilled, (state, action) => {
+      state.UserData = action.payload.userData;
+      console.log(action.payload.userData);
+    });
+    builder.addCase(HandelResendEmailToVerify.rejected, (state, action) => {
+      state.UserData = action.payload.userData;
+      console.log(action.payload.userData);
+    });
     // ^ GetUserData
     builder.addCase(getUserData.fulfilled, (state, action) => {
       state.UserData = action.payload.data;

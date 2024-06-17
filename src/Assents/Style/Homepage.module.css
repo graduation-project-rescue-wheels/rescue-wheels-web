@@ -1,0 +1,61 @@
+@font-face {
+    font-family: Cairo;
+    src: url(/src/Assents/Fonts/Cairo-VariableFont_slnt\,wght.ttf);
+}
+.font{
+    font-family: 'Cairo';
+}
+.p{
+    color: rgba(70, 70, 70, 1);
+    font-weight: 400;
+    font-size: 18px;
+}
+.pComponent{
+    color: rgba(70, 70, 70, 1);
+    font-weight: 400;
+    font-size: 14px;
+}
+.submitbutton{
+    width: 60%;
+    padding: 15px 0px;
+    background: rgb(31, 42, 68) !important;
+    color: White !important;
+}
+.imageWidth{
+    width: 90%;
+}
+.imageWidth2{
+    width: 80%;
+}
+.linearGradientText {
+    background: linear-gradient(360deg, rgba(90, 217, 240, 1), rgba(42, 177, 118, 1));
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 48px;
+    font-weight: bold;
+
+}
+.borderlinearGradient{
+    border: 1px solid rgba(90, 217, 240, 1);
+    border-radius: 20px;
+    padding: 40px 0px;
+    background-color: rgba(247, 247, 247, 1) !important;
+}
+
+
+/* footer */
+
+.footerContainer{
+    background-color: rgba(242, 247, 252, 1);
+}
+.pfooter{
+    color: rgba(101, 101, 101, 1);
+    font-size: small;
+}
+.pfooterlast{
+    color: rgba(56, 208, 248, 1);
+    font-size: small;
+}
+.customheigth{
+    height: 100px;
+}

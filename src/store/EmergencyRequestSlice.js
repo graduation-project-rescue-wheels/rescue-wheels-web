@@ -9,7 +9,7 @@ export const AddRequest = createAsyncThunk(
     try {
       const body = formData;
       const response = await axios.put(
-        "http://localhost:3000/emrgencyRequest/addRequest",
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/addRequest`,
         body,
         {
           headers: {
@@ -32,7 +32,7 @@ export const getNearByRequests = createAsyncThunk(
   async ({ long, lat }) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/emrgencyRequest/nearbyRequests/${long}/${lat}`,
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/nearbyRequests/${long}/${lat}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -56,7 +56,7 @@ export const acceptRequest = createAsyncThunk(
     console.log("Bodt",body);
     try {
       const response = await axios.put(
-        `http://localhost:3000/emrgencyRequest/acceptRequest/`,
+       `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/acceptRequest/`,
         body,
         {
           headers: {
@@ -79,7 +79,7 @@ export const getAllRequests = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/emrgencyRequest/getAllRequests",
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/getAllRequests`,
         {
           headers: {
             accessToken: "prefixToken_" + localStorage.getItem("Token"),
@@ -101,7 +101,7 @@ export const cancelRequest = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.put(
-        "http://localhost:3000/emrgencyRequest/cancelRequest",
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/cancelRequest`,
         id,
         {
           headers: {
@@ -134,7 +134,7 @@ export const cancelResponder = createAsyncThunk(
     console.log(body);
     try {
       const response = await axios.put(
-        "http://localhost:3000/emrgencyRequest/cancelResponder",
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/cancelResponder`,
         body,
         {
           headers: {
@@ -164,7 +164,7 @@ export const GetRequestById = createAsyncThunk(
   "EmergencyRequest/GetRequestById",
   async(id)=>{
       try{
-           const response = await axios.get(`http://localhost:3000/emrgencyRequest/getRequestById/${id}`,{
+           const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/getRequestById/${id}`,{
                   headers:{
                       accesstoken:"prefixToken_"+localStorage.getItem("Token")
                   }
@@ -184,7 +184,7 @@ export const CancleRequest = createAsyncThunk(
   async(formdata)=>{
       const body = formdata;
       try{
-           const response = await axios.put(`http://localhost:3000/emrgencyRequest/cancelRequest/`,body,{
+           const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/cancelRequest/`,body,{
                   headers:{
                       accesstoken:"prefixToken_"+localStorage.getItem("Token")
                   }

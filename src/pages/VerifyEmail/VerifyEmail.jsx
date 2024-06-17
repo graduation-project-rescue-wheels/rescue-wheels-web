@@ -1,95 +1,118 @@
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Heading,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import verifyImageWait from "../../assets/icons/verify-cryptocurrency.svg";
-import verifyImageDone from "../../assets/icons/verify-cryptocurrency (1).svg";
-import { useParams } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Toaster } from "react-hot-toast";
-import { showErrorToast, showSuccessToast } from "../../components/toast";
-import { VerifyAccount } from "../../store/AuthSlice";
-const VerifyEmail = () => {
-  const [verifyImage, setVerifyImage] = useState(verifyImageWait);
-  const [loading, setloading] = useState(false);
-  const { userToken } = useParams();
-  console.log(userToken);
-  const dispatch = useDispatch();
-  const verifyAccount = async () => {
-    let formData = {
-      userToken,
-    };
-    setloading(true);
-    const res = await dispatch(VerifyAccount(formData));
-    console.log(res.payload);
-    if (res.payload.data?.errMsg) {
-      if (res.payload.data?.errMsg == "jwt expired")
-        showErrorToast("Token expired");
-      console.log(res.payload.data.errMsg);
-    } else {
-      if (res.payload.status == 200) {
-        showSuccessToast(res.payload.message);
+import  { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 
-        setVerifyImage(verifyImageDone);
-      } else {
-        showErrorToast(res.payload.message);
+import logo from "../../Assents/Images/Auth/logoo.png";
+import style from "../../Assents/Style/Auth.module.css";
+import ArrowTop from "../../Assents/Images/Auth/ArrowTop.png";
+import ArrowBottom from "../../Assents/Images/Auth/ArrowBottom.png";
+import success from "../../Assents/Images/Auth/Check_ring_duotone.svg";
+import fail from "../../Assents/Images/Auth/Dell_duotone.svg";
+import { HandelResendEmailToVerify, HandelVerifyEmail } from '../../store/AuthSlice';
+import { useNavigate } from "react-router-dom";
+
+const VerifyEmail = () => {
+    const {userToken} = useParams()
+    const navigate = useNavigate()
+    console.log(userToken);
+    const [res,setRes]= useState('');
+    let [ErrorMessage, setErrorMessage] = useState("");
+    let [ResendMessage, setResendMessage] = useState("");
+
+
+    const dispatch = useDispatch()
+    const HandelverifyEmail=async()=>{
+      const formData = {
+        userToken
+      }
+      const res = await dispatch(HandelVerifyEmail(formData))
+      console.log(res);
+      setErrorMessage(res.payload.message)
+      if(res.payload.status === 200){
+        setRes(true)
+      }else{
+        setRes(false)
       }
     }
-
-    setloading(false);
-  };
-
+     const ResendVerificationEmail=async()=>{
+      const formData = {email : localStorage.getItem("email")}
+      const res = await dispatch(HandelResendEmailToVerify(formData))
+      console.log(res);
+      console.log(res.payload);
+      setResendMessage(res.payload.message)
+    }
+    useEffect(()=>{
+      HandelverifyEmail()
+    },[])
   return (
-    <div className="py-2">
-      <Toaster position="top-center" reverseOrder={false} />
-      <div className="w-50 mt-5 text-center m-auto bg-white rounded-5">
-        <div>
-          <Card maxW="sm">
-            <CardBody>
-              <Stack mt="6" spacing="3">
-                {/* <Loader/> */}
-                <div className="m-auto mt-3  d-flex justify-content-center">
-                  {loading ? (
-                    <Loader />
-                  ) : (
-                    <img src={verifyImage} width={90} alt="verify" />
-                  )}
-                </div>
+    <div>
+    <div className="m-0 p-0">
+      <div className="row m-0 p-0">
+      <div className={[style.bgLeft,"col-md-6 d-none d-lg-block"].join(" ")}>
+         <div className={[style.mainContainer].join(" ")}>
+         <div className={[style.arrow, style.arrowTopLeft].join(" ")}>
+            <img className="w-75" src={ArrowTop} alt="ArrowTop" />
+          </div>
 
-                <Heading size="md">Rescue Wheels</Heading>
-                <Text>
-                  Please click on the following button to activate your Account.
-                </Text>
-              </Stack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2" className=" w-100 m-auto">
-                <Button
-                  onClick={verifyAccount}
-                  className="btn mb-3 w-50 m-auto"
-                  style={{ backgroundColor: "#e48700", color: "white" }}
-                  variant="solid"
-                  colorScheme="blue"
-                >
-                  Verify
-                </Button>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
+          {/* Logo */}
+          <div className="w-75 m-auto">
+            <img className="w-50" src={logo} alt="logo" />
+          </div>
+
+          <div className={[style.arrow, style.arrowBottomRight].join(" ")}>
+            <img className="w-75" src={ArrowBottom} alt="ArrowTop" />
+          </div>
+         </div>
+        </div>
+        <div style={{overflow:'auto'}} className={[style.loginFormContainer, "col-md-6"].join(" ")}>
+            {/* Logo */}
+            <div className="w-75">
+            <div className='text-center'>
+            {ResendMessage ? (
+                
+                <div className="alert py-1 alert-success">
+    <p>{ResendMessage}</p>
+  </div>
+              ) : (
+                ""
+              )}
+            </div>
+            {res?
+              <div className="text-center">
+              <img className="w-50" src={success} alt="logo" />
+              <div className={[style.input].join(" ")}>
+                <h6 className=" text-success">{ErrorMessage}</h6>
+              </div>
+              <button
+                onClick={()=>navigate('/')}
+                type="submit"
+                className={[style.submitbutton, "btn"].join(" ")}
+              >
+                Sign In
+              </button>
+              </div>
+            :<div>
+            <div className="text-center">
+              <img className="w-50" src={fail} alt="logo" />
+              <div className={[style.input].join(" ")}>
+                <h6 className=" text-danger">{"expired"}</h6>
+                
+              </div>
+              <button
+                onClick={ResendVerificationEmail}
+                type="submit"
+                className={[style.submitbutton, "btn"].join(" ")}
+              >
+Resend the activation email
+</button>
+              </div>
+            </div>}
+            </div>
+            </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VerifyEmail;
+export default VerifyEmail
