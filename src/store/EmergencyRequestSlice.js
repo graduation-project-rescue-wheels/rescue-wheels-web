@@ -20,7 +20,11 @@ export const AddRequest = createAsyncThunk(
       console.log("All Repair Centers:", response.data);
       return response.data;
     } catch (error) {
-      console.error("Error during Send:", error);
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.message);
+      }
       return error.response || { error: "An error occurred" };
     }
   }
@@ -32,7 +36,9 @@ export const getNearByRequests = createAsyncThunk(
   async ({ long, lat }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/nearbyRequests/${long}/${lat}`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/emrgencyRequest/nearbyRequests/${long}/${lat}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -53,10 +59,10 @@ export const acceptRequest = createAsyncThunk(
   "EmergencyRequest/acceptRequest",
   async (formdata) => {
     const body = formdata;
-    console.log("Bodt",body);
+    console.log("Bodt", body);
     try {
       const response = await axios.put(
-       `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/acceptRequest/`,
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/acceptRequest/`,
         body,
         {
           headers: {
@@ -67,7 +73,11 @@ export const acceptRequest = createAsyncThunk(
       console.log("All Requests :", response.data);
       return response.data;
     } catch (error) {
-      console.error("Error during Send:", error);
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.errorMessage);
+      } else {
+        showErrorToast(error.response.data.message);
+      }
       return error.response || { error: "An error occurred" };
     }
   }
@@ -130,7 +140,7 @@ export const cancelRequest = createAsyncThunk(
 export const cancelResponder = createAsyncThunk(
   "Emergency/cancelResponder",
   async (formdata) => {
-    const body = formdata
+    const body = formdata;
     console.log(body);
     try {
       const response = await axios.put(
@@ -162,41 +172,50 @@ export const cancelResponder = createAsyncThunk(
 // & =======================Get Request By ID =======================
 export const GetRequestById = createAsyncThunk(
   "EmergencyRequest/GetRequestById",
-  async(id)=>{
-      try{
-           const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/getRequestById/${id}`,{
-                  headers:{
-                      accesstoken:"prefixToken_"+localStorage.getItem("Token")
-                  }
-           })
-           console.log("All Requests :",response.data)
-           return response.data
-      }catch(error){
-          console.error('Error during Send:', error);
-          return error.response || { error: 'An error occurred' };
-      }
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/emrgencyRequest/getRequestById/${id}`,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + localStorage.getItem("Token"),
+          },
+        }
+      );
+      console.log("All Requests :", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during Send:", error);
+      return error.response || { error: "An error occurred" };
+    }
   }
-)
+);
 
 // & ======================== Cancle Request ============================
 export const CancleRequest = createAsyncThunk(
   "EmergencyRequest/CancleRequest",
-  async(formdata)=>{
-      const body = formdata;
-      try{
-           const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/cancelRequest/`,body,{
-                  headers:{
-                      accesstoken:"prefixToken_"+localStorage.getItem("Token")
-                  }
-           })
-           console.log("All Requests :",response.data)
-           return response.data
-      }catch(error){
-          console.error('Error during Send:', error);
-          return error.response || { error: 'An error occurred' };
-      }
+  async (formdata) => {
+    const body = formdata;
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}/emrgencyRequest/cancelRequest/`,
+        body,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + localStorage.getItem("Token"),
+          },
+        }
+      );
+      console.log("All Requests :", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during Send:", error);
+      return error.response || { error: "An error occurred" };
+    }
   }
-)
+);
 let EmergencyRequestSlice = createSlice({
   name: "EmergencyRequest",
   initialState: {
@@ -204,10 +223,10 @@ let EmergencyRequestSlice = createSlice({
     getNearByRequestsData: [],
     acceptRequestData: [],
     AllEmergencyRequests: [],
-    cancleRequestData:[],
-    GetRequestByIdData:[],
-    AcceptRequestData:[],
-    cancelResponderData:[]
+    cancleRequestData: [],
+    GetRequestByIdData: [],
+    AcceptRequestData: [],
+    cancelResponderData: [],
   },
   extraReducers: (builder) => {
     // ^ GetAllVehicles
@@ -229,26 +248,24 @@ let EmergencyRequestSlice = createSlice({
       console.log(action.payload);
     });
 
-     //^ GetRequestById
-     builder.addCase(GetRequestById.fulfilled,(state,action)=>{
-      state.GetRequestByIdData=action.payload   
+    //^ GetRequestById
+    builder.addCase(GetRequestById.fulfilled, (state, action) => {
+      state.GetRequestByIdData = action.payload;
       console.log(action.payload);
-  })
-  builder.addCase(GetRequestById.rejected,(state,action)=>{
-      state.GetRequestByIdData = action.payload
+    });
+    builder.addCase(GetRequestById.rejected, (state, action) => {
+      state.GetRequestByIdData = action.payload;
       console.log(action.payload);
-
-  })
+    });
     // ^ Cancle request
-    builder.addCase(CancleRequest.fulfilled,(state,action)=>{
-      state.cancleRequestData=action.payload   
+    builder.addCase(CancleRequest.fulfilled, (state, action) => {
+      state.cancleRequestData = action.payload;
       console.log(action.payload);
-  })
-  builder.addCase(CancleRequest.rejected,(state,action)=>{
-      state.cancleRequestData = action.payload
+    });
+    builder.addCase(CancleRequest.rejected, (state, action) => {
+      state.cancleRequestData = action.payload;
       console.log(action.payload);
-
-  })
+    });
 
     // ^ accept request
     builder.addCase(acceptRequest.fulfilled, (state, action) => {
@@ -266,18 +283,15 @@ let EmergencyRequestSlice = createSlice({
       console.log(action.payload);
     });
 
-
-
     // ^cancelResponder
-    builder.addCase(cancelResponder.fulfilled,(state,action)=>{
-      state.cancelResponderData=action.payload   
+    builder.addCase(cancelResponder.fulfilled, (state, action) => {
+      state.cancelResponderData = action.payload;
       console.log(action.payload);
-  })
-  builder.addCase(cancelResponder.rejected,(state,action)=>{
-      state.cancelResponderData = action.payload
+    });
+    builder.addCase(cancelResponder.rejected, (state, action) => {
+      state.cancelResponderData = action.payload;
       console.log(action.payload);
-
-  })
+    });
   },
 });
 
