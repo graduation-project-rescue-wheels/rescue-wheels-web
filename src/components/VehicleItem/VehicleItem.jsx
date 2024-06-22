@@ -13,7 +13,6 @@ import axios from "axios";
 const VehicleItem = ({ id }) => {
   const [vehiclesData, setVehiclesData] = useState([]);
   const [vehicle, setVehicle] = useState(null);
-  const [isFetched, setIsFetched] = useState(false);
   const dispatch = useDispatch();
 
   async function handleDeleteVehicle() {
@@ -24,7 +23,6 @@ const VehicleItem = ({ id }) => {
   async function fetchVehicleData() {
     const res = await dispatch(getVehicleById(id));
     setVehicle(res.payload.vehicle);
-    setIsFetched(true);
   }
 
   function fetchVehiclesData() {
