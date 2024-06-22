@@ -6,11 +6,11 @@ import { showErrorToast, showSuccessToast } from "../components/toast";
 export const AddRepairCenter = createAsyncThunk(
   "RepairCenter/AddRepairCenter",
   async (formData) => {
-    const body = formData
+    const body = formData;
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/RepairCenter/AddRepairCenter`,
-        body, 
+        body,
         {
           headers: {
             accessToken: "prefixToken_" + localStorage.getItem("Token"),
@@ -25,13 +25,12 @@ export const AddRepairCenter = createAsyncThunk(
       console.log("repair Center Added successful:", response.data);
       return response.data;
     } catch (error) {
-
       if (error.response.status === 400) {
         showErrorToast(error.response.data.message);
       } else {
         showErrorToast(error.response.data.errMsg);
       }
-      
+
       console.error("Error during login:", error);
       return error.response || { error: "An error occurred" };
     }
@@ -41,10 +40,18 @@ export const AddRepairCenter = createAsyncThunk(
 // & ======================= Get All RepairCenters =======================
 export const GetAllRepairCenters = createAsyncThunk(
   "RepairCenter/GetAllRepairCenters",
-  async () => {
+  async (formData) => {
+    console.log(formData.filters);
+    console.log(formData.sortedBy);
+    console.log(formData.isAscending);
+    console.log(formData.coords);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/GetAllRepairCenters`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/RepairCenter/GetAllRepairCenters/${JSON.stringify(
+          formData.filters
+        )}/${formData.sortedBy}/${formData.isAscending}/${JSON.stringify(formData.coords)}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -66,7 +73,9 @@ export const GetspacificepairCenter = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/GetSingleRepairCenter/${id}`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/RepairCenter/GetSingleRepairCenter/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + localStorage.getItem("Token"),
@@ -89,7 +98,9 @@ export const deleteRepairCenterById = createAsyncThunk(
     const accessToken = await localStorage.getItem("Token");
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/DeleteRepairCenterById/${id}`,
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/RepairCenter/DeleteRepairCenterById/${id}`,
         {
           headers: {
             accesstoken: "prefixToken_" + accessToken,
