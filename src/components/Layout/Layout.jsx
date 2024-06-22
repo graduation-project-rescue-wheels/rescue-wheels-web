@@ -17,7 +17,7 @@ export default function Layout() {
       <Navbar />
       {/*  */}
 
-      <div>
+      <div style={{ marginTop: "108px" }}>
         <Outlet />
       </div>
     </div>
