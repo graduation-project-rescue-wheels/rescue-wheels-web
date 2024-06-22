@@ -102,7 +102,7 @@ const History = () => {
   return (
     <>
       {isFetched ? (
-        <div className="mx-3 mt-3">
+        <div className="mx-3" style={{ marginTop: "130px" }}>
           <SimpleTable
             rows={requests}
             columns={columns}
@@ -111,7 +111,7 @@ const History = () => {
           />
         </div>
       ) : (
-        <div className="mt-5">
+        <div style={{ marginTop: "130px" }}>
           <Loading />
         </div>
       )}

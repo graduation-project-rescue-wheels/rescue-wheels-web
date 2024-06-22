@@ -26,3 +26,32 @@
 .image:hover::after {
   display: flex;
 }
+
+.list-link {
+  color: inherit !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.list-link:hover {
+  color: #717573 !important;
+}
+
+.link-active {
+  transition: all 0.5s;
+  color: #717573 !important;
+}
+
+@media (max-width: 991px) {
+  .navigation-bar {
+    display: none !important;
+  }
+  .body-info {
+    margin-left: 0 !important;
+  }
+  .card-body {
+    flex-direction: column;
+  }
+}
