@@ -47,7 +47,14 @@ const RepairCenters = () => {
   );
   const formData = new FormData();
   const getAllRepairCenters = async () => {
-    const res = await dispatch(GetAllRepairCenters());
+    const res = await dispatch(
+      GetAllRepairCenters({
+        filters: [],
+        sortedBy: 1,
+        isAscending: true,
+        coords: {},
+      })
+    );
     setRows(res.payload.data);
   };
   const inputRef = useRef();

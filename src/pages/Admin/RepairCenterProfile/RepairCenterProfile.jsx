@@ -119,7 +119,7 @@ const RepairCenterProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="tables w-75 d-flex flex-column align-items-center gap-5">
+            {/* <div className="tables w-75 d-flex flex-column align-items-center gap-5">
               <SimpleTable
                 rows={[]}
                 columns={requestColumns}
@@ -130,7 +130,7 @@ const RepairCenterProfile = () => {
                 columns={technicianColumns}
                 title={"All Technicians"}
               />
-            </div>
+            </div> */}
           </div>
         )
       ) : (

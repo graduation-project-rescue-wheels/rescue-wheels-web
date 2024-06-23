@@ -130,7 +130,14 @@ const Dashboard = () => {
   };
 
   const getAllRepairCenters = async () => {
-    const res = await dispatch(GetAllRepairCenters());
+    const res = await dispatch(
+      GetAllRepairCenters({
+        filters: [],
+        sortedBy: 1,
+        isAscending: true,
+        coords: {},
+      })
+    );
     setRepairCenters(res.payload.data);
   };
 
