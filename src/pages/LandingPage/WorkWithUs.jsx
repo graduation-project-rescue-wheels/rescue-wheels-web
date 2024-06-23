@@ -10,7 +10,7 @@ const WorkWithUs = () => {
             <div className='col-md-6' style={{borderRight:'2px solid white'}}>
 <p className='fw-light text-white px-4 pb-5'>
 If you have a car  Repair center and want to receive clients through us, there will be a reservation system that we provide for you to determine the appropriate time to receive each reservation.</p>
-<Link to={"/signUp"} className="applyBtn bg-white text-dark ms-4 p-3 my-5" style={{backgroundColor:'#362e93'}}>
+<Link to={"/RepairCenter"} className="applyBtn bg-white text-dark ms-4 p-3 my-5" style={{backgroundColor:'#362e93'}}>
             Apply As Repair Center
             <ArrowRightAltIcon className="applyIcon bg" />
           </Link>
@@ -19,8 +19,8 @@ If you have a car  Repair center and want to receive clients through us, there w
             <p className='fw-light text-white px-4 pb-5'>
             If you want to work as an emergency technician, help broken down cars on the road as quickly as possible by knowing their location
 </p>
-<Link to={"/signUp"} className="applyBtn bg-white text-dark ms-4 p-3 mt-5" style={{backgroundColor:'#362e93'}}>
-            Apply As Repair Center
+<Link to={"/TechnicianNew"} className="applyBtn bg-white text-dark ms-4 p-3 mt-5" style={{backgroundColor:'#362e93'}}>
+            Apply As Emergency Technician
             <ArrowRightAltIcon className="applyIcon bg" />
           </Link>
             </div>

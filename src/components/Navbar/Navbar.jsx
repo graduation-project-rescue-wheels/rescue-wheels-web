@@ -67,11 +67,11 @@ const Navbar = () => {
                   Settings
                 </NavLink>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink className="nav-link" to="/Technician">
                   Technician
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
             {/* <form className="d-flex bg ms-auto rounded-pill bg-transparent" role="search">
         <input className="form-control me-2 rounded-pill" type="search" placeholder="Search" aria-label="Search" />
