@@ -1,10 +1,11 @@
 // import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { GetAllRepairCenters } from "../../store/RepairCenterSlice";
 import RepairCenterComponent from "../../components/RepairCenterComponent/RepairCenterComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import Loading from "../../components/Loading/Loading";
+import "./HomePage.css";
 
 const HomePage = () => {
   // const navigate = useNavigate()
@@ -15,10 +16,17 @@ const HomePage = () => {
   const [repairCenterData, setRepairCenterData] = useState([]);
   const [filteredRepairCenter, setFilteredRepairCenter] = useState([]);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
-  const [selectedCategories, setSelectedCategories] = useState([
-    
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([
+    "Tyre shop",
+    "Electrician",
+    "Automechanic",
+    "Air conditioner",
+    "Body shop",
+    "Exhaust system",
   ]);
-  const [selectedSortOption, setSelectedSortOption] = useState(1);
+  const [selectedSortOption, setSelectedSortOption] =
+    useState(SORT_BY_LOCATION);
   const [geoLocation, setGeoLocation] = useState({});
   const [searchValue, setSearchValue] = useState({});
   const [isFetched, setIsFetched] = useState(false);
@@ -56,62 +64,10 @@ const HomePage = () => {
           rc.name.toLowerCase().includes(searchValue.toLowerCase())
         )
       );
+    } else {
+      setFilteredRepairCenter(repairCenterData);
     }
   };
-
-  // const calculateDistance = (long1, lat1, long2, lat2) => {
-  //   const earthR = 6371; // 6371 is radius of Earth
-  //   const lat1Rad = (lat1 * Math.PI) / 180;
-  //   const lat2Rad = (lat2 * Math.PI) / 180;
-  //   const deltaLatRad = ((lat2 - lat1) * Math.PI) / 180;
-  //   const deltaLongRad = ((long2 - long1) * Math.PI) / 180;
-
-  //   const a =
-  //     Math.sin(deltaLatRad / 2) * Math.sin(deltaLatRad / 2) +
-  //     Math.cos(lat1Rad) *
-  //       Math.cos(lat2Rad) *
-  //       Math.sin(deltaLongRad / 2) *
-  //       Math.sin(deltaLongRad / 2);
-  //   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  //   return earthR * c;
-  // };
-
-  // const handleFilter = (selectValue) => {
-  //   let sortedData = [...filteredRepairCenter];
-  //   if (selectValue === "alphabetically") {
-  //     sortedData.sort((a, b) => {
-  //       return a.name.localeCompare(b.name);
-  //     });
-  //   } else if (selectValue === "by-location") {
-  //     sortedData.sort((a, b) => {
-  //       var diffA = calculateDistance(
-  //         geoLocation.lng,
-  //         geoLocation.lat,
-  //         a.location.coords.latitude,
-  //         a.location.coords.longitude
-  //       );
-
-  //       var diffB = calculateDistance(
-  //         geoLocation.lng,
-  //         geoLocation.lat,
-  //         b.location.coords.latitude,
-  //         b.location.coords.longitude
-  //       );
-
-  //       if (diffA > diffB) {
-  //         return 1;
-  //       } else if (diffA < diffB) {
-  //         return -1;
-  //       } else {
-  //         return 0;
-  //       }
-  //     });
-  //   } else {
-  //     sortedData = [...repairCenterData];
-  //   }
-  //   setFilteredRepairCenter(sortedData);
-  // };
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -146,6 +102,7 @@ const HomePage = () => {
           return filtered;
         });
       } else {
+        console.log(selectedCategories);
         setFilteredRepairCenter(() => {
           let rcs = repairCenterData;
           let filtered = [];
@@ -161,54 +118,135 @@ const HomePage = () => {
     }
   }, [selectedCategories.length]);
 
+  useEffect(() => {
+    let btns = document.querySelectorAll(".filterBtn");
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.classList.contains("activeFilter")) {
+          btn.classList.remove("activeFilter");
+        } else {
+          btn.classList.add("activeFilter");
+        }
+      })
+    })
+  }, []);
+
   return (
     <div>
       <div className="container" style={{ marginTop: "140px" }}>
-        <h2 className="fw-bold">Repair Centers</h2>
-        <div className="d-flex justify-content-between">
-          <div
-            className="d-flex align-items-center bg-white"
+        <div className="d-flex align-items-center justify-content-between">
+          <h2 className="fw-bold">Repair Centers</h2>
+          <button
+            class="btn"
+            type="button"
             style={{
-              padding: "0.75rem 1.5rem",
-              width: "40%",
-              borderRadius: "1rem",
-              boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+              backgroundColor: "var(--main-color)",
+              color: "var(--secondry-color)",
             }}
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample"
           >
-            <SearchIcon />
-            <input
-              type="search"
-              style={{
-                border: "none",
-                outline: "none",
-                marginLeft: "0.5rem",
-                width: "100%",
-              }}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+            Filters
+          </button>
+        </div>
+
+        <div
+          class="offcanvas offcanvas-start"
+          tabindex="-1"
+          id="offcanvasExample"
+          aria-labelledby="offcanvasExampleLabel"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+              Filters
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
           </div>
-          <div className="d-flex align-items-center">
-            sort
-            <select
-              name="sort"
-              id="sort"
-              className="ms-1"
-              onChange={(e) => setSelectedSortOption(e.target.value)}
-              style={{
-                padding: "0.75rem 1rem",
-                width: "10rem",
-                borderRadius: "1rem",
-                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-                outline: "none",
-                border: "none",
-              }}
-            >
-              <option value="none">none</option>
-              <option value={SORT_BY_LOCATION}>By Location</option>
-              <option value={SORT_ALPHABETICALLY}>Alphabetically</option>
-            </select>
+          <div class="offcanvas-body">
+            <div className="d-flex flex-column gap-5">
+              <div className="d-flex flex-wrap">
+                <h2 className="w-100">Search</h2>
+                <div
+                  className="d-flex align-items-center bg-white w-100"
+                  style={{
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "1rem",
+                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                  }}
+                >
+                  <SearchIcon />
+                  <input
+                    type="search"
+                    style={{
+                      border: "none",
+                      outline: "none",
+                      marginLeft: "0.5rem",
+                      width: "100%",
+                    }}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="d-flex flex-wrap">
+                <h2 className="w-100">Sort</h2>
+                <select
+                  name="sort"
+                  id="sort"
+                  className="w-100"
+                  onChange={(e) => setSelectedSortOption(e.target.value)}
+                  style={{
+                    padding: "0.75rem 1rem",
+                    borderRadius: "1rem",
+                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                    outline: "none",
+                    border: "none",
+                  }}
+                >
+                  <option value={SORT_BY_LOCATION}>By Location</option>
+                  <option value={SORT_ALPHABETICALLY}>Alphabetically</option>
+                </select>
+              </div>
+              <div className="d-flex flex-wrap gap-3">
+                <h2 className="w-100">Categories</h2>
+                {allCategories.map((category) => {
+                  return (
+                    <button
+                      key={category}
+                      className="btn filterBtn text-nowrap"
+                      onClick={(e) => {
+                        if (selectedCategories.includes(e.target.innerHTML)) {
+                          setSelectedCategories((categories) =>
+                            categories.filter(
+                              (item) => e.target.innerHTML !== item
+                            )
+                          );
+                        } else {
+                          setSelectedCategories((category) => [
+                            ...category,
+                            e.target.innerHTML,
+                          ]);
+                        }
+                      }}
+                      style={{
+                        backgroundColor: "var(--main-color)",
+                        color: "var(--secondry-color)",
+                      }}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
+
         {isFetched ? (
           <div className="d-flex flex-wrap">
             {filteredRepairCenter?.map((el) => {
