@@ -192,6 +192,29 @@ export const GetRequestById = createAsyncThunk(
     }
   }
 );
+// & =======================Get All Requests =======================
+export const GetUserHistory = createAsyncThunk(
+  "EmergencyRequest/GetUserHistory",
+  async () => {
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/emrgencyRequest/getUserHistory`,
+        {
+          headers: {
+            accesstoken: "prefixToken_" + localStorage.getItem("Token"),
+          },
+        }
+      );
+      console.log("All Requests :", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during Send:", error);
+      return error.response || { error: "An error occurred" };
+    }
+  }
+);
 
 // & ======================== Cancle Request ============================
 export const CancleRequest = createAsyncThunk(

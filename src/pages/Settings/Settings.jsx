@@ -88,20 +88,21 @@ const Settings = () => {
       formData = InfoUpdateForm.values;
     }
 
-    let res;
+    for (var key in formData) {
+      form.append(key, formData[key]);
+    }
 
     if (isImage) {
       form.append("image", image);
-      for (var key in formData) {
-        form.append(key, formData[key]);
-      }
-      res = await dispatch(UpdateUser(form));
+      const res = await dispatch(UpdateUser(form));
+      res.payload.updatedUser && setUser(res.payload.updatedUser);
       setIsImage(false);
     } else {
-      res = await dispatch(UpdateUser(formData));
+      const res = await dispatch(UpdateUser(form));
+      console.log(res.payload);
+      res.payload.updatedUser && setUser(res.payload.updatedUser);
     }
 
-    res.payload.updatedUser && setUser(res.payload.updatedUser);
   }
 
   function handleInputSubmit() {

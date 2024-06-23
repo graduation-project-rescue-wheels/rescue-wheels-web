@@ -1,13 +1,4 @@
-.heroSection {
-  display: flex;
-  justify-content: space-around;
-}
-
-@media (max-width: 991px) {
-  .heroSection {
-    flex-direction: column !important;
-  }
-  .img {
-    width: 100% !important;
-  }
+.activeFilter {
+  color: var(--main-color) !important;
+  background-color: var(--secondry-color) !important;
 }
