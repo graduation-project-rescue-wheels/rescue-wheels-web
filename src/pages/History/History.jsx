@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetRequestById } from "../../store/EmergencyRequestSlice";
+import { GetRequestById, GetUserHistory } from "../../store/EmergencyRequestSlice";
 import Loading from "../../components/Loading/Loading";
 import SimpleTable from "../../components/SimpleTable/SimpleTable";
 import GoogleMap from "../RepairCenterShow/GoogleMap";
@@ -12,7 +12,6 @@ const History = () => {
   const [requests, setRequests] = useState([]);
   const [signedUserRequests, setSignedUserRequests] = useState([]);
   const users = useSelector((state) => state.AuthData.AllUsers);
-  console.log(users);
 
   const mapStyle = {
     position: "relative",
@@ -27,7 +26,10 @@ const History = () => {
       field: "responder",
       headerName: "Responder",
       width: 150,
-      valueGetter: (value, row) => row.responder ? `${row.responder.firstName} ${row.responder.lastName}` : "none",
+      valueGetter: (value, row) =>
+        row.responder
+          ? `${row.responder.firstName} ${row.responder.lastName}`
+          : "none",
     },
     { field: "type", headerName: "Type", width: 200 },
     { field: "state", headerName: "State", width: 150 },
@@ -80,19 +82,12 @@ const History = () => {
     { field: "createdAt", headerName: "Created At", width: 200 },
   ];
 
-  const fetchUserData = async () =>{
-    const res = await dispatch(getUserData());
-    console.log(res.payload.data.Requests_IDS);
-    setSignedUserRequests(res.payload.data.Requests_IDS);
-  }
-
   const fetchRequests = async () => {
-    setRequests([])
-    const resUser = await dispatch(getUserData());
-    await resUser.payload.data.Requests_IDS.forEach(async (id) => {
-      const res = await dispatch(GetRequestById(id));
-      setRequests((requests) => [...requests, res.payload.request]);
-    });
+    const res = await dispatch(GetUserHistory());
+    for(const e in res.payload.requests){
+      console.log(res.payload.requests[e].requestedBy);
+    }
+    setRequests(res.payload.requests);
     setIsFetched(true);
   };
 
