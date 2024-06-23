@@ -18,12 +18,14 @@ import RepairCenters from './pages/Admin/RepairCenters/RepairCenters'
 import Requests from './pages/Admin/Requests/Requests'
 import RepairCenterProfile from "./pages/Admin/RepairCenterProfile/RepairCenterProfile";
 import Emergency from './pages/Emergency/Emergency'
-import Technician from './pages/Technician/Technician'
+// import Technician from './pages/Technician/Technician'
 import History from './pages/History/History'
 import LandingPage from './pages/LandingPage/LandingPage'
 import ForgetPassword from './pages/ForgetPassword/ForgetPassword'
 import OTP from './pages/ForgetPassword/Otp'
 import ResetPassword from './pages/ForgetPassword/ResetPassword'
+import RepairCenter from './pages/Careers/RepairCenter'
+import TechnicianNew from './pages/Careers/TechnicianNew'
 
 function App() {
   let router = createBrowserRouter([
@@ -35,6 +37,8 @@ function App() {
     {path:'/OTP',element:<OTP/>},
     {path:'/ResetPassword',element:<ResetPassword/>},
     { path: "/VerifyEmail/:userToken", element: <VerifyEmail /> },
+    {path:"/RepairCenter",element:<RepairCenter/>},
+    {path:"/TechnicianNew",element:<TechnicianNew/>},
     {
       path: "/",
       element: <Layout />,
@@ -45,9 +49,11 @@ function App() {
         { path: "/Vehicles", element: <Vehicles /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
         { path: "Emergency", element: <Emergency /> },
-        { path: "Technician", element: <Technician /> },
+        // { path: "Technician", element: <Technician /> },
         { path: "History", element: <History /> },
         { path: "Rating/:idRepairCenter/:idReservation", element: <History /> },
+
+
         
       ]
     },
