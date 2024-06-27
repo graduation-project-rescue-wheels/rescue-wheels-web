@@ -50,8 +50,8 @@ const Emergency = () => {
   const handleAddRequset = async () => {
     FormData.vehicle = selectedVehicle;
     FormData.type = issue;
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    FormData.requestedBy = user._id;
+    // const user = JSON.parse(localStorage.getItem("currentUser"));
+    FormData.requestedBy = User._id;
     FormData.coordinates = { latitude: lat, longitude: lng };
     FormData.dropOffLocation = { latitude: lat, longitude: lng };
     const res = await dispatch(AddRequest(FormData));
