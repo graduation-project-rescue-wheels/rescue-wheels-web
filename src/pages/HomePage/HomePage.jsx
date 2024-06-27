@@ -1,7 +1,7 @@
 // import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useRef } from "react";
-import { GetAllRepairCenters } from "../../store/RepairCenterSlice";
+import { GetAllOffers,GetAllRepairCenters } from "../../store/RepairCenterSlice";
 import RepairCenterComponent from "../../components/RepairCenterComponent/RepairCenterComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import Loading from "../../components/Loading/Loading";
@@ -10,6 +10,8 @@ import "./HomePage.css";
 const HomePage = () => {
   // const navigate = useNavigate()
   const dispatch = useDispatch();
+  const [offers,setOffers] = useState([])
+
   const SORT_ALPHABETICALLY = 1;
   const SORT_BY_LOCATION = 2;
   // const {AddRepaircenterData} = useSelector((x)=>x.RepairCenterData)
@@ -129,11 +131,32 @@ const HomePage = () => {
         }
       })
     })
-  }, []);
+    getOfferData()
 
+  }, []);
+  const getOfferData = async()=>{
+    const res = await dispatch(GetAllOffers())
+    console.log("offers", res.payload.data);
+    setOffers(res.payload.data)
+}
   return (
     <div>
       <div className="container" style={{ marginTop: "140px" }}>
+      {offers.length>0 ?
+            <h2 className="fw-bold">Offres</h2>
+      :""}
+
+      <div>
+      <div className="row g-3 mb-5 ">
+        {offers.map((offer) => {
+          return <div key={offer._id} className="col-md-3  rounded">
+            <div className="bg-white rounded-4 p-3">
+              <h5 className="white rounded-pill p-1 ps-2" style={{backgroundColor:'#362e93',color:'white'}}>{offer.title}</h5>
+              <p className="text-secondary">{offer.Desc}</p>
+            </div>
+            </div>
+        })}</div>
+      </div>
         <div className="d-flex align-items-center justify-content-between">
           <h2 className="fw-bold">Repair Centers</h2>
           <button

@@ -11,7 +11,7 @@ import io from "socket.io-client";
 import LoaderProgress from "../../components/Loader/LoaderProgress";
 import { getUserData } from "../../store/AuthSlice";
 import { Toaster } from "react-hot-toast";
-const socket = io("http://localhost:3000/", {
+const socket = io(`${import.meta.env.VITE_SERVER_URL}/`, {
   autoConnect: false,
   auth: {
     token: "prefixToken_" + localStorage.getItem("Token"), // intializing token with a null value to be able to modify it after successful sign in/user datat loading
