@@ -37,6 +37,24 @@ export const AddRepairCenter = createAsyncThunk(
   }
 );
 
+// & ======================= Get All Offers =======================
+export const GetAllOffers = createAsyncThunk(
+  "RepairCenter/GetAllOffers",
+  async () => {
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/Offer/getAllOffer`
+      );
+      console.log("All Repair Centers:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during login:", error);
+      return error.response || { error: "An error occurred" };
+    }
+  }
+);
 // & ======================= Get All RepairCenters =======================
 export const GetAllRepairCenters = createAsyncThunk(
   "RepairCenter/GetAllRepairCenters",
@@ -159,6 +177,18 @@ let RepairCenterSlice = createSlice({
       state.GetspacificepairCenterData = action.payload;
       console.log(action.payload);
     });
+    //^GetAllOffers
+    builder.addCase(GetAllOffers.fulfilled, (state, action) => {
+      state.GetspacificepairCenterData = action.payload;
+      console.log(action.payload);
+    });
+    builder.addCase(GetAllOffers.rejected, (state, action) => {
+      state.GetspacificepairCenterData = action.payload;
+      console.log(action.payload);
+    });
+    
+    
+        
   },
 });
 
