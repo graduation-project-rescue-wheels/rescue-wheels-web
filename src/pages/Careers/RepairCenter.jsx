@@ -9,8 +9,8 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
 } from "react-google-places-autocomplete";
 import {
-  AddRepairCenter,
   GetAllRepairCenters,
+  HandelAddRepairCenterNew,
   deleteRepairCenterById,
 } from "../../store/RepairCenterSlice";
 import style from "../../Assents/Style/Auth.module.css";
@@ -40,7 +40,7 @@ const RepairCenter = () => {
       console.log(key + "  " + RegisterForm.values[key]);
       formData.append(key, RegisterForm.values[key]);
     }
-    await dispatch(AddRepairCenter(formData));
+    await dispatch(HandelAddRepairCenterNew(formData));
     getAllRepairCenters();
     RegisterForm.resetForm();
     setAddress("");

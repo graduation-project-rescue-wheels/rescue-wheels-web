@@ -49,6 +49,27 @@ export const HandelRegister = createAsyncThunk(
   }
 );
 
+export const HandelsignUpAsEmergencyTech = createAsyncThunk(
+  "Auth/HandelsignUpAsEmergencyTech",
+  async (formData) => {
+    console.log(formData);
+    let body = formData;
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/user/signUpAsEmergencyTech`,
+        body
+      );
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error occurred during registration:", error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+
 
 export const HandelResendEmailToVerify = createAsyncThunk(
   "Auth/HandelResendEmailToVerify",
@@ -351,6 +372,16 @@ let AuthSlice = createSlice({
       console.log(action.payload.userData);
     });
 
+// ^ Register
+builder.addCase(HandelsignUpAsEmergencyTech.fulfilled, (state, action) => {
+  state.UserData = action.payload.userData;
+  console.log(action.payload.userData);
+});
+builder.addCase(HandelsignUpAsEmergencyTech.rejected, (state, action) => {
+  state.UserData = action.payload.userData;
+  console.log(action.payload.userData);
+});
+    
     // ^ UpdateUser
     builder.addCase(UpdateUser.fulfilled, (state, action) => {
       // if (action.payload.isValid) {

@@ -26,6 +26,7 @@ import OTP from './pages/ForgetPassword/Otp'
 import ResetPassword from './pages/ForgetPassword/ResetPassword'
 import RepairCenter from './pages/Careers/RepairCenter'
 import TechnicianNew from './pages/Careers/TechnicianNew'
+import Technician from './pages/Technician/Technician'
 
 function App() {
   let router = createBrowserRouter([
@@ -49,7 +50,7 @@ function App() {
         { path: "/Vehicles", element: <Vehicles /> },
         { path: "RepairCenterShow/:id", element: <RepairCenterShow /> },
         { path: "Emergency", element: <Emergency /> },
-        // { path: "Technician", element: <Technician /> },
+        { path: "Technician", element: <Technician /> },
         { path: "History", element: <History /> },
         { path: "Rating/:idRepairCenter/:idReservation", element: <History /> },
 

@@ -36,6 +36,37 @@ export const AddRepairCenter = createAsyncThunk(
     }
   }
 );
+// & ======================= AddRepairCenterNew =======================
+export const HandelAddRepairCenterNew = createAsyncThunk(
+  "RepairCenter/HandelAddRepairCenterNew",
+  async (formData) => {
+    const body = formData;
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/RepairCenter/AddRepairCenterNew`,
+        body
+      );
+
+      if (response.status === 201) {
+        showSuccessToast(response.data.message);
+      }
+
+      console.log("repair Center Added successful:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 400) {
+        showErrorToast(error.response.data.message);
+      } else {
+        showErrorToast(error.response.data.errMsg);
+      }
+
+      console.error("Error during login:", error);
+      return error.response || { error: "An error occurred" };
+    }
+  }
+);
+
+
 
 // & ======================= Get All Offers =======================
 export const GetAllOffers = createAsyncThunk(

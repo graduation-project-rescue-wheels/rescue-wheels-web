@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "../../Assents/Style/Auth.module.css";
 import logo from "../../Assents/Images/Auth/logoo.png";
 import ArrowTop from "../../Assents/Images/Auth/ArrowTop.png";
@@ -39,18 +39,27 @@ function Login() {
     onSubmit: LoginSubmit,
   });
   async function LoginSubmit(val) {
-    console.log(val);
+    // console.log(val);
     const res = await dispatch(HandelLogin(val))
     console.log(res.payload);
     if(res.payload.status === 200){
       console.log('ss');
       localStorage.setItem("Token",res.payload.Token)
       navigate('/HomePage')
+      navigate('/Admin/Dashboard')
+    
     }
     if(!(res.payload.data.status)){
       setErrorMessage(res.payload.data.errMsg)
     }
+
+    
   }
+  // useEffect(()=>{
+
+  //       localStorage.setItem("Token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2N2Q5MjhkMDdjZDEzYWRlOTQwMGY2NSIsImVtYWlsIjoiYWhtZWRodXNlZW55MTExQGdtYWlsLmNvbSIsImlhdCI6MTcxOTY4MjkzOH0.qN9DQZoX9T1nJ2cc0sAWU0-y1uPV8WUdL39n7NCVdKc")
+
+  // },[])
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
 

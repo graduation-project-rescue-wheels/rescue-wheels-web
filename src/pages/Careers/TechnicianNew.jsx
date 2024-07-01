@@ -8,7 +8,7 @@ import * as YUP from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { HandelRegister } from "../../store/AuthSlice";
+import { HandelsignUpAsEmergencyTech } from "../../store/AuthSlice";
 import { useNavigate } from "react-router-dom";
 
 const TechnicianNew = () => {
@@ -57,7 +57,7 @@ const TechnicianNew = () => {
       console.log(val);
       localStorage.setItem('email',val.email)
       setLoading(true);
-      const res = await dispatch(HandelRegister(val))
+      const res = await dispatch(HandelsignUpAsEmergencyTech(val))
       console.log(res.payload);
       if (res.payload.status !== true) {
         setalertType('alert-danger')
@@ -276,12 +276,7 @@ const TechnicianNew = () => {
    Sign Up              </button>
               )}
             </div>
-            <div className={[style.ToLogin, "my-4"].join(" ")} >
-            <p>Already have an account?
-            <span onClick={()=>navigate('/login')}> Sign In</span>
-              </p>
-  
-              </div>
+           
             </div>
             
           </div>

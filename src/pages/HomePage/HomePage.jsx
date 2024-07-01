@@ -147,10 +147,10 @@ const HomePage = () => {
       :""}
 
       <div>
-      <div className="row g-3 mb-5 ">
+      <div className="d-flex g-3 mb-5 pb-3" style={{overflow:'auto'}}>
         {offers.map((offer) => {
           return <div key={offer._id} className="col-md-3  rounded">
-            <div className="bg-white rounded-4 p-3">
+            <div className="bg-white me-3 rounded-4 p-3">
               <h5 className="white rounded-pill p-1 ps-2" style={{backgroundColor:'#362e93',color:'white'}}>{offer.title}</h5>
               <p className="text-secondary">{offer.Desc}</p>
             </div>

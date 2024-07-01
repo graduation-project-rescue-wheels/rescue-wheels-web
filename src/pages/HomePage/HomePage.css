@@ -2,3 +2,18 @@
   color: var(--main-color) !important;
   background-color: var(--secondry-color) !important;
 }
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+.offer-title {
+  flex-shrink: 0;
+}
+
+.col-md-3 {
+  flex: 1;
+}

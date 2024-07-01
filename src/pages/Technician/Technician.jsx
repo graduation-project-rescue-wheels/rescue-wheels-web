@@ -6,8 +6,8 @@ import io from 'socket.io-client';
 import tmpImage from '../../Assents/usertemp.png'
 import Loader from "../../components/Loader/Loader";
 import LoaderProgress from "../../components/Loader/LoaderProgress";
-const socket = io('http://localhost:3000/',{
-    autoConnect: false,
+const socket = io(`${import.meta.env.VITE_SERVER_URL}/`, {
+  autoConnect: false,
     auth: {
         token: "prefixToken_"+localStorage.getItem("Token") 
     }

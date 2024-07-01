@@ -61,7 +61,7 @@ const Emergency = () => {
     }
 
     console.log(res);
-    setUser(res.payload.user);
+    // setUser(res.payload.user);
     console.log(FormData);
     console.log("Selected Vehicle:", selectedVehicle);
     console.log("Issue:", issue);
@@ -110,8 +110,9 @@ const Emergency = () => {
     }
   };
   useEffect(() => {
-    findAllNeededData();
     getCurrentLocation();
+    findAllNeededData();
+    
     console.log(requestData);
 
     console.log(currentLocation);
